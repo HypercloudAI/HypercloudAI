@@ -10,145 +10,169 @@
 
   <style>
     :root{
-      --bg-1:#061123;
-      --bg-2:#071a2b;
+      --bg-1: #071027;
+      --bg-2: #071a2b;
       --glass: rgba(255,255,255,0.03);
       --muted: rgba(255,255,255,0.78);
       --accent-1: linear-gradient(90deg,#7b2ff7,#ff6ec7,#ffb86b);
       --accent-2: linear-gradient(90deg,#00c6ff,#0072ff,#8e2de2);
       --llm-gradient: linear-gradient(90deg,#ffd86b,#ff6ec7,#7b2ff7);
-      --radius:14px;
-      --ease:cubic-bezier(.17,.84,.44,1);
+      --radius: 14px;
+      --ease: cubic-bezier(.17,.84,.44,1);
       --glass-border: rgba(255,255,255,0.06);
       --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      --accent-text: #eaf0ff;
-      --footer-bg: linear-gradient(180deg, rgba(0,0,0,0.18), rgba(7,12,23,0.45));
     }
 
-    /* Reset */
+    /* Basic reset */
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
       background:
-        radial-gradient(800px 420px at 10% 12%, rgba(123,47,247,0.04), transparent 7%),
-        radial-gradient(700px 380px at 92% 88%, rgba(0,198,255,0.03), transparent 7%),
+        radial-gradient(900px 500px at 10% 10%, rgba(123,47,247,0.04), transparent 7%),
+        radial-gradient(800px 420px at 90% 90%, rgba(0,198,255,0.03), transparent 7%),
         linear-gradient(180deg,var(--bg-1),var(--bg-2));
-      color:var(--accent-text);
+      color:#eef6ff;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
-      padding:28px 18px;
+      padding:36px 20px;
       display:flex;
       justify-content:center;
       align-items:flex-start;
     }
 
-    /* Container */
-    .wrap{ width:min(1100px,96%); margin:0 auto 48px; animation:fadeIn .55s var(--ease) both; }
-    @keyframes fadeIn{ from{opacity:0; transform:translateY(6px)} to{opacity:1; transform:none} }
+    /* Layout container */
+    .wrap{ width:min(1100px,96%); margin:0 auto 60px; animation:contentFade 600ms var(--ease) both; }
+    @keyframes contentFade { from {opacity:0; transform: translateY(8px)} to {opacity:1; transform: translateY(0)} }
 
-    /* Header */
-    header{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px; }
-    .brand{ display:flex; gap:12px; align-items:center; }
+    header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; gap:18px; }
+    .brand{ display:flex; gap:14px; align-items:center; }
     .logo{
-      width:56px; height:56px; border-radius:12px; display:flex; align-items:center; justify-content:center;
+      width:56px; height:56px; border-radius:12px;
       background: linear-gradient(135deg,#0ea5e9 0%, #7c3aed 100%);
-      color:white; font-weight:800; font-family:"Space Grotesk", Inter, sans-serif; box-shadow:0 10px 30px rgba(0,0,0,0.55);
+      display:flex; align-items:center; justify-content:center; font-weight:800; font-family:"Space Grotesk", Inter, sans-serif;
+      color:white; box-shadow: 0 10px 30px rgba(0,0,0,0.55), inset 0 -6px 18px rgba(0,0,0,0.12);
     }
-    .brand h1{ font-size:18px; font-family:"Space Grotesk", Inter, sans-serif; margin-bottom:2px; }
+    .brand h2{ font-family:"Space Grotesk", Inter, sans-serif; font-weight:700; font-size:18px; color:#f2f7ff; }
     .brand p{ font-size:12px; color:var(--muted); margin-top:2px; }
 
-    /* Nav + hamburger */
-    .nav-wrap{ display:flex; align-items:center; gap:12px; }
-    nav.primary{ display:flex; gap:10px; align-items:center; }
-    .nav-link{ color:var(--muted); text-decoration:none; padding:10px 12px; border-radius:10px; font-size:13px; transition:all 200ms var(--ease); border:1px solid transparent; }
-    .nav-link:hover{ transform:translateY(-3px); color:white; background:rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.03); }
-
+    .cta{ display:flex; gap:12px; align-items:center; }
     .btn{
-      background:transparent; border:1px solid var(--glass-border); padding:10px 14px; border-radius:10px; color:var(--muted);
-      text-decoration:none; font-size:13px; transition:all 220ms var(--ease);
+      background:transparent; border:1px solid var(--glass-border); padding:10px 14px; border-radius:10px;
+      color:var(--muted); text-decoration:none; font-size:13px; transition:all 250ms var(--ease); backdrop-filter: blur(6px);
     }
-    .btn.primary{ background: linear-gradient(90deg,#7b2ff7 0%, #ff6ec7 50%, #ffb86b 100%); color:#071027; border:none; font-weight:600; }
-
-    /* Hamburger (mobile) */
-    .hamburger{
-      display:none; width:44px; height:44px; align-items:center; justify-content:center; border-radius:10px; cursor:pointer;
-      border:1px solid var(--glass-border); background:rgba(255,255,255,0.01);
+    .btn.primary{
+      background: linear-gradient(90deg,#7b2ff7 0%, #ff6ec7 50%, #ffb86b 100%);
+      color:#071027; border:none; font-weight:600; box-shadow: 0 10px 30px rgba(123,47,247,0.12);
     }
-    .hamburger span{ display:block; width:18px; height:2px; background:var(--muted); border-radius:2px; transition:all 220ms ease; position:relative; }
-    .hamburger span::before, .hamburger span::after{ content:""; position:absolute; left:0; width:18px; height:2px; background:var(--muted); border-radius:2px; transition:all 220ms ease; }
-    .hamburger span::before{ top:-6px } .hamburger span::after{ top:6px }
+    .btn:hover{ transform: translateY(-4px) }
 
-    /* Mobile nav open state */
-    .hamburger[aria-expanded="true"] span{ background:transparent; }
-    .hamburger[aria-expanded="true"] span::before{ transform:rotate(45deg); top:0; }
-    .hamburger[aria-expanded="true"] span::after{ transform:rotate(-45deg); top:0; }
-
-    /* Hero */
+    /* Hero & layout */
     .hero{ display:grid; grid-template-columns: 1fr 380px; gap:26px; align-items:start; }
-    .card{ background:var(--card-bg); border-radius:var(--radius); padding:24px; border:1px solid var(--glass-border); box-shadow:0 14px 50px rgba(3,6,23,0.6); }
-    .hero-left{ padding:22px; }
+    .card{ background: var(--card-bg); border-radius: var(--radius); padding:26px; border:1px solid var(--glass-border); box-shadow: 0 12px 40px rgba(3,6,23,0.6); }
+    .hero-left{ padding:22px; position:relative; overflow:visible; }
 
+    /* Title gradient animation - slower, smoother */
     .title{
-      font-family:"Space Grotesk", Inter, sans-serif; font-weight:800; font-size: clamp(30px, 6vw, 56px); line-height:1;
-      background:var(--accent-1); background-size:220% 220%; -webkit-background-clip:text; background-clip:text; color:transparent;
+      font-family:"Space Grotesk", Inter, sans-serif; font-weight:800;
+      font-size: clamp(30px, 6vw, 56px); line-height:1; letter-spacing:-0.6px;
+      background: var(--accent-1); background-size:220% 220%;
+      -webkit-background-clip:text; background-clip:text; color:transparent;
       animation: gradientFlow 9s linear infinite;
+      transform-origin:center;
     }
-    @keyframes gradientFlow{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+    @keyframes gradientFlow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-    .subtitle{ color:var(--muted); margin-top:8px; font-size:15px; }
-    .meta{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
-    .pill{ padding:8px 10px; background:rgba(255,255,255,0.02); border-radius:10px; font-size:13px; color:var(--muted); }
+    .subtitle{ font-size:15px; color:var(--muted); margin-top:8px; margin-bottom:12px; opacity:0.98; }
+    .meta{ display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+    .pill{ padding:8px 10px; background:rgba(255,255,255,0.02); border-radius:10px; font-size:13px; color:var(--muted); border:1px solid rgba(255,255,255,0.02); }
 
     .about{ margin-top:18px; color:#dfe9ff; font-size:15px; line-height:1.6; }
-    .about .highlight{ font-weight:700; -webkit-background-clip:text; background:var(--accent-2); color:transparent; }
+    .about .highlight{ font-weight:700; background: var(--accent-2); -webkit-background-clip:text; color:transparent; }
 
-    /* LLM link */
-    .llm-link{ background:var(--llm-gradient); background-size:200% 200%; -webkit-background-clip:text; color:transparent; font-weight:700; text-decoration:none; padding:2px 6px; border-radius:6px; display:inline-block; transition:transform 260ms var(--ease); }
-    .llm-link:hover{ transform:translateY(-3px) scale(1.02); filter:brightness(1.05); }
+    /* LLM special link (only the word) */
+    .llm-link{
+      background: var(--llm-gradient); background-size:200% 200%;
+      -webkit-background-clip: text; background-clip: text; color:transparent;
+      font-weight:700; text-decoration:none; padding:2px 6px; border-radius:6px;
+      display:inline-block; transition: transform 260ms var(--ease), filter 260ms var(--ease);
+      box-shadow: 0 8px 30px rgba(123,47,247,0.06);
+      animation: llmPulse 6s ease-in-out infinite;
+    }
+    .llm-link:hover{ transform: translateY(-3px) scale(1.02); filter:brightness(1.06); }
+    @keyframes llmPulse { 0%{ background-position:0% 50% } 50%{ background-position:100% 50% } 100%{ background-position:0% 50% } }
 
-    /* Platform note */
-    .platform-note{ margin-top:14px; border-radius:12px; padding:14px; background:linear-gradient(90deg, rgba(123,47,247,0.04), rgba(0,198,255,0.02)); border:1px solid rgba(255,255,255,0.03); color:#eef6ff; font-size:14px; }
+    /* prominent platform shift notice */
+    .platform-note{
+      margin-top:18px; border-radius:12px; padding:14px; background:linear-gradient(90deg, rgba(123,47,247,0.06), rgba(0,198,255,0.02));
+      border:1px solid rgba(255,255,255,0.03); color:#eef6ff; font-size:15px;
+      display:flex; gap:12px; align-items:flex-start; box-shadow: 0 8px 30px rgba(3,6,23,0.45);
+      animation: slideIn 700ms var(--ease) both;
+    }
+    @keyframes slideIn { from {opacity:0; transform: translateY(8px)} to {opacity:1; transform: translateY(0)} }
 
-    /* Side projects list */
-    .side{ display:flex; flex-direction:column; gap:12px; }
-    .project-card{ background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01)); border-radius:12px; padding:12px; border:1px solid var(--glass-border); transition:transform 360ms var(--ease), box-shadow 360ms var(--ease); cursor:pointer; }
-    .project-card:hover{ transform:translateY(-8px) rotateX(1.2deg); box-shadow:0 24px 60px rgba(7,12,32,0.62); }
-    .project-title{ font-weight:700; font-size:15px; background:linear-gradient(90deg,#ffd86b,#ff6ec7); -webkit-background-clip:text; color:transparent; }
-    .project-meta{ font-size:13px; color:var(--muted); margin-top:6px; }
+    .platform-note strong{ font-weight:700; color: #fff; }
 
-    /* Projects grid */
-    .projects{ display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:18px; }
+    /* Side project column */
+    .side{ display:flex; flex-direction:column; gap:16px; }
+    .project-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+      border-radius:12px; padding:14px; border:1px solid var(--glass-border);
+      transition: transform 380ms var(--ease), box-shadow 380ms var(--ease);
+      cursor:pointer;
+      transform-style:preserve-3d;
+      will-change: transform;
+      display:block;
+    }
+    .project-card:hover{ transform: translateY(-8px) rotateX(2deg); box-shadow: 0 22px 50px rgba(7,12,32,0.6); }
+    .project-title{ font-weight:700; font-size:15px; margin-bottom:6px; background: linear-gradient(90deg,#ffd86b,#ff6ec7); -webkit-background-clip:text; color:transparent; }
+    .project-meta{ font-size:13px; color:var(--muted); }
 
-    /* Modal */
-    .modal-backdrop{ position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:1200; background:rgba(2,6,20,0.6); backdrop-filter: blur(6px); }
+    /* Projects grid (main) */
+    .projects{ display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:20px; }
+
+    /* Modal (project details) */
+    .modal-backdrop{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:1200;
+      background: rgba(2,6,20,0.6); backdrop-filter: blur(6px);
+      animation: fadeBg 240ms ease-out both;
+    }
     .modal-backdrop[data-open="true"]{ display:flex; }
-    .modal{ width:min(880px,94%); max-height:86vh; overflow:auto; border-radius:14px; padding:22px; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid rgba(255,255,255,0.06); box-shadow: 0 30px 90px rgba(3,6,23,0.7); }
+    @keyframes fadeBg { from {opacity:0} to {opacity:1} }
+
+    .modal{
+      width:min(880px,94%); max-height:86vh; overflow:auto; border-radius:14px; padding:22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.06); box-shadow: 0 30px 90px rgba(3,6,23,0.7);
+      transform: translateY(12px) scale(0.98);
+      animation: popIn 300ms var(--ease) both;
+    }
+    @keyframes popIn { from {opacity:0; transform: translateY(12px) scale(0.98)} to {opacity:1; transform: translateY(0) scale(1)} }
+
     .modal h3{ font-size:20px; margin-bottom:8px; }
-    .close-btn{ background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:10px; color:var(--muted); cursor:pointer; float:right; }
+    .modal p{ color:#e6f0ff; line-height:1.6; margin-bottom:10px; }
+    .modal .meta{ margin-top:8px; margin-bottom:12px; gap:8px; }
+    .close-btn{
+      background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:10px; color:var(--muted);
+      cursor:pointer; float:right;
+    }
+    .modal-footer{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px; flex-wrap:wrap; }
+    .muted{ color:var(--muted); font-size:13px; }
 
-    /* Footer & bottom section */
-    footer.site-footer{ margin-top:28px; padding:22px; border-radius:12px; background:var(--footer-bg); border:1px solid rgba(255,255,255,0.03); display:flex; justify-content:space-between; gap:16px; align-items:flex-start; flex-wrap:wrap; }
-    .footer-left{ max-width:640px; }
-    .footer-right{ display:flex; flex-direction:column; gap:8px; min-width:220px; }
-    .footer h4{ margin-bottom:8px; font-size:15px; }
-    .footer p{ color:var(--muted); font-size:13px; line-height:1.6; }
+    footer{ margin-top:32px; display:flex; justify-content:space-between; gap:16px; align-items:center; color:var(--muted); font-size:13px; flex-wrap:wrap; }
 
-    .support{ font-weight:700; color:#fff; }
-    .small{ font-size:13px; color:var(--muted) }
+    a.link{ color:inherit; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,0.06); transition: color 160ms; }
 
-    /* Mobile behavior */
+    /* Responsive */
     @media (max-width:980px){
-      .hero{ grid-template-columns: 1fr; }
-      nav.primary{ display:none; }
-      .hamburger{ display:flex; }
-      .wrap{ padding-bottom:28px; }
-      footer.site-footer{ flex-direction:column; }
+      .hero{ grid-template-columns:1fr; }
+      .title{ font-size:40px }
+      .modal{ width:94% }
     }
 
-    /* accessible reduced motion */
+    /* prefers-reduced-motion */
     @media (prefers-reduced-motion: reduce){
-      .title, .project-card, .modal, .modal-backdrop, .llm-link { animation:none; transition:none; }
+      .title, .project-card, .btn, .modal, .modal-backdrop { animation: none; transition: none; }
     }
   </style>
 </head>
@@ -156,48 +180,23 @@
   <main class="wrap" role="main">
     <header>
       <div class="brand" aria-label="Brand">
-        <div class="logo" aria-hidden="true" aria-label="Hypercloud logo">
-          <!-- Inline small logo mark -->
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-            <rect x="0" y="0" width="24" height="24" rx="5" fill="url(#g)"/>
-            <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#0ea5e9"/><stop offset="1" stop-color="#7c3aed"/></linearGradient></defs>
-          </svg>
-        </div>
+        <div class="logo" aria-hidden="true">HC</div>
         <div>
-          <h1>Hypercloud Intelligence</h1>
+          <h2>Hypercloud Intelligence</h2>
           <p>Research · Lightweight models · Production packaging</p>
         </div>
       </div>
 
-      <div class="nav-wrap">
-        <nav class="primary" aria-label="Primary navigation">
-          <a class="nav-link" href="#projects">Projects</a>
-          <a class="nav-link" href="#about-section">About</a>
-          <a class="nav-link" href="#contact-section">Contact</a>
-          <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com">Contribute</a>
-        </nav>
-
-        <!-- Hamburger for small screens -->
-        <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
-          <span aria-hidden="true"></span>
-        </button>
-      </div>
+      <nav class="cta" aria-label="Primary">
+        <a class="btn" href="#projects" id="jump-projects">Projects</a>
+        <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com">Contribute</a>
+      </nav>
     </header>
 
-    <!-- Mobile Menu -->
-    <div id="mobileMenu" role="dialog" aria-modal="false" style="display:none; position:fixed; right:18px; top:78px; z-index:1300;">
-      <div style="min-width:220px; border-radius:12px; padding:12px; background:var(--card-bg); border:1px solid var(--glass-border); box-shadow:0 24px 60px rgba(3,6,23,0.6);">
-        <a class="nav-link" href="#projects" style="display:block; margin-bottom:6px;">Projects</a>
-        <a class="nav-link" href="#about-section" style="display:block; margin-bottom:6px;">About</a>
-        <a class="nav-link" href="#contact-section" style="display:block; margin-bottom:6px;">Contact</a>
-        <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com" style="display:block; margin-top:8px;">Contribute</a>
-      </div>
-    </div>
-
-    <!-- Hero -->
     <section class="hero" aria-labelledby="heroTitle">
       <div class="card hero-left">
-        <h2 id="heroTitle" class="title">Hypercloud Intelligence</h2>
+        <h1 id="heroTitle" class="title">Hypercloud Intelligence</h1>
+
         <p class="subtitle">Focused engineering for efficient, accessible AI models with real-world deployment goals.</p>
 
         <div class="meta" role="list" aria-hidden="false">
@@ -207,248 +206,253 @@
           <div class="pill">Age: <strong>11</strong></div>
         </div>
 
-        <article class="about" id="about-section" aria-labelledby="aboutHeading">
-          <h3 id="aboutHeading" style="margin-top:14px; font-size:15px; color:var(--muted);">About</h3>
-          <p class="about">
-            <strong class="highlight">Hypercloud Intelligence</strong> is an engineering initiative founded and led by Ariyan Ahmed (online: <strong>BloxyWave</strong>).
-            The project focuses on compact models, optimization pipelines, and production-grade packaging to enable local, low-cost AI deployments.
+        <article class="about" aria-labelledby="aboutHeading">
+          <h3 id="aboutHeading" style="margin-top:16px;font-size:15px;color:var(--muted)">About</h3>
+          <p>
+            <strong class="highlight">Hypercloud Intelligence</strong> is a research and engineering initiative founded and led by developer Ariyan Ahmed (online: <strong>BloxyWave</strong>).
+            The project concentrates on compact architectures, rigorous optimization, and packaging aimed at real-world, low-cost deployments.
           </p>
-          <p style="margin-top:10px; color:var(--muted);">
-            Engineering priorities include architecture research, quantization and pruning toolchains, runtime optimization for target platforms, and rigorous benchmarking to ensure reproducibility.
+
+          <p style="margin-top:10px">
+            Engineering priorities include architecture design, quantization & pruning pipelines, runtime optimization for target platforms, and reproducible toolchains for benchmarking and deployment.
           </p>
         </article>
 
+        <!-- Declaration with only the single clickable LLM word -->
         <div class="platform-note" aria-live="polite">
-          <div>
+          <div style="flex:1">
             <strong>Declaration</strong>
             <div style="margin-top:8px; color:var(--muted); font-size:14px;">
-              We are working to build an AI model without assistance from OpenAI, Gemini, or any external
+              We are working to build an AI model without the assistance of OpenAI, Gemini, or any external
               <a class="llm-link" href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank" rel="noopener noreferrer">LLM</a>.
               Our objective is to create powerful AI that is free to use and deployable locally.
             </div>
           </div>
         </div>
 
-        <div class="platform-note" style="margin-top:12px;">
-          <div>
+        <!-- Clear, professional platform shift -->
+        <div class="platform-note" style="margin-top:14px;">
+          <div style="flex:1">
             <strong>Platform focus update</strong>
             <div style="margin-top:8px; color:var(--muted); font-size:14px;">
               During early development we focused on Android. <strong>Moving forward, Hypercloud Intelligence is prioritizing Windows-only projects.</strong>
-              This strategic shift enables deeper native integration, expanded tooling, and access to larger development compute resources.
+              This shift enables deeper integration, richer tooling, and expanded compute options for development and distribution.
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Projects sidebar with clickable cards -->
+      <!-- Right column: Projects list (clickable) -->
       <aside class="side" aria-labelledby="projectsHeading">
-        <div class="card" id="projectsSummary" aria-hidden="false">
-          <h3 id="projectsHeading" style="font-size:15px; margin-bottom:8px; color:var(--muted)">Featured projects (click any)</h3>
+        <div class="card project-card" id="projectsSummary" aria-hidden="false">
+          <h3 id="projectsHeading" style="font-size:15px;margin-bottom:8px;color:var(--muted)">Featured projects (click any card)</h3>
 
+          <!-- Each card uses data-project to identify modal content -->
           <div class="project-card" role="button" tabindex="0" data-project="krix-alpha" aria-label="Krix alpha">
             <div class="project-title">Krix alpha</div>
-            <div class="project-meta">Ultra-optimized, minimal-capacity runtime for constrained environments.</div>
+            <div class="project-meta">A first-stage mobile-optimized release: tiny footprint and fast startup; intentionally low capacity for ultra-low-resource scenarios.</div>
           </div>
 
           <div style="height:10px"></div>
 
           <div class="project-card" role="button" tabindex="0" data-project="dragonpy-lite" aria-label="Dragonpy lite">
             <div class="project-title">Dragonpy lite</div>
-            <div class="project-meta">Compact transformer variant for on-device tasks and app integration.</div>
+            <div class="project-meta">A compact runtime-friendly transformer variant tuned for on-device inference and integration into apps.</div>
           </div>
 
           <div style="height:10px"></div>
 
           <div class="project-card" role="button" tabindex="0" data-project="dragonpy-1" aria-label="Dragonpy 1.0">
             <div class="project-title">Dragonpy 1.0</div>
-            <div class="project-meta">First full Dragonpy release: balanced local inference and predictable performance.</div>
+            <div class="project-meta">The first full Dragonpy release: balanced capability and predictable local inference for prototypes and embedded tooling.</div>
           </div>
 
           <div style="height:10px"></div>
 
           <div class="project-card" role="button" tabindex="0" data-project="dragonpy-max" aria-label="Dragonpy Max">
             <div class="project-title">Dragonpy Max</div>
-            <div class="project-meta">Cutdown Sonic variant optimized for mobile throughput (legacy).</div>
+            <div class="project-meta">An Android-optimized cutdown from the Sonic line focused on throughput and runtime efficiency for mobile deployments.</div>
           </div>
 
           <div style="height:10px"></div>
 
           <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic" aria-label="Dragonpy sonic">
             <div class="project-title">Dragonpy sonic</div>
-            <div class="project-meta">Flagship model built from first principles; active research and safety audits.</div>
+            <div class="project-meta">The flagship model built from first principles: scalable architecture design and active research on training & safety.</div>
           </div>
 
           <div style="height:10px"></div>
 
           <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic-gpt4all" aria-label="Dragonpy sonic gpt4all">
             <div class="project-title">Dragonpy sonic (gpt4all)</div>
-            <div class="project-meta">Archived prototype that used community models; discontinued.</div>
+            <div class="project-meta">An archived experimental branch that used external community assistance during prototyping. Status: discontinued.</div>
           </div>
         </div>
 
-        <div class="card small" style="display:flex;flex-direction:column;gap:8px; margin-top:8px;">
-          <div style="font-weight:700; color:var(--muted)">Quick facts</div>
-          <div style="font-size:13px; color:var(--muted);">
-            • Platform roadmap: <strong>Windows-only</strong> (current).<br>
-            • Contact: <a class="nav-link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a><br>
-            • Support: <a class="nav-link" href="mailto:contact.hypercloud@gmail.com">contact.hypercloud@gmail.com</a>
+        <div class="card small" style="display:flex;flex-direction:column;gap:10px">
+          <div style="font-weight:700;color:var(--muted)">Quick facts</div>
+          <div style="font-size:13px;color:var(--muted)">
+            • Platform focus: <strong>Windows-only</strong> (current roadmap).<br>
+            • Contact: <a class="link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a><br>
+            • Goals: open toolchains, transparent benchmarks, minimal-cost deployments.
           </div>
         </div>
       </aside>
     </section>
 
-    <!-- Main projects grid -->
-    <section class="card" id="projects" style="margin-top:20px;">
-      <h3 style="font-size:18px; margin-bottom:8px;">Projects & technical notes</h3>
+    <!-- Main projects grid: each card also clickable -->
+    <section class="card" id="projects" style="margin-top:22px;">
+      <h3 style="font-size:18px;margin-bottom:8px">Projects & technical notes</h3>
 
       <div class="projects" aria-live="polite">
         <div class="project-card" role="button" tabindex="0" data-project="krix-alpha">
           <div class="project-title">Krix alpha</div>
-          <div class="project-meta" style="margin-top:6px;">Extreme optimization for minimal compute and fast cold starts; capacity intentionally limited.</div>
+          <div class="project-meta" style="margin-top:6px">
+            Extreme mobile optimization: simplified architecture, aggressive quantization, and micro-optimizations for fast cold starts. Intended for low-resource devices; capacity intentionally limited.
+          </div>
         </div>
 
         <div class="project-card" role="button" tabindex="0" data-project="dragonpy-1">
           <div class="project-title">Dragonpy 1.0</div>
-          <div class="project-meta" style="margin-top:6px;">Balanced local inference model for predictable resource usage and offline tasks.</div>
+          <div class="project-meta" style="margin-top:6px">
+            Balanced local inference model designed for deterministic behavior and predictable resource usage. Suitable for offline productivity tools and robotics prototyping.
+          </div>
         </div>
 
         <div class="project-card" role="button" tabindex="0" data-project="dragonpy-lite">
           <div class="project-title">Dragonpy lite</div>
-          <div class="project-meta" style="margin-top:6px;">Minimal footprint variant using mixed precision quantization and layer fusion.</div>
+          <div class="project-meta" style="margin-top:6px">
+            Minimal footprint variant using mixed precision quantization and layer fusion to remain useful on memory-constrained devices.
+          </div>
         </div>
 
         <div class="project-card" role="button" tabindex="0" data-project="dragonpy-max">
           <div class="project-title">Dragonpy Max</div>
-          <div class="project-meta" style="margin-top:6px;">Throughput-focused cutdown of Sonic architecture for mobile (legacy).</div>
+          <div class="project-meta" style="margin-top:6px">
+            Android-focused cutdown of the Sonic architecture with selective pruning and runtime batching to maximize throughput on mobile.
+          </div>
         </div>
 
         <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic">
           <div class="project-title">Dragonpy sonic</div>
-          <div class="project-meta" style="margin-top:6px;">Flagship high-performance model; active research, benchmarking, and safety reviews.</div>
+          <div class="project-meta" style="margin-top:6px">
+            High-performance flagship being developed from scratch with modular attention, efficient tokenization, and training recipes that prioritize parameter efficiency.
+          </div>
         </div>
 
         <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic-gpt4all">
           <div class="project-title">Dragonpy sonic (gpt4all)</div>
-          <div class="project-meta" style="margin-top:6px;">Archived experimental branch, discontinued and retained for research context.</div>
+          <div class="project-meta" style="margin-top:6px">
+            Archived experimental branch that leveraged community models for prototyping. Valuable for historical context; not in active development.
+          </div>
         </div>
       </div>
 
-      <div class="grid-row" style="margin-top:18px; display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+      <div class="grid-row" style="margin-top:18px">
         <div class="card small">
-          <h4 style="margin-bottom:8px;">Technical goals</h4>
-          <ul style="color:var(--muted); font-size:14px; line-height:1.6; margin-left:16px;">
+          <h4 style="margin-bottom:8px">Technical goals</h4>
+          <ul style="color:var(--muted);font-size:14px;line-height:1.6;margin-left:16px">
             <li>Maximize compute efficiency per parameter.</li>
-            <li>Enable Windows-first inference with low power draw and developer tooling.</li>
-            <li>Open toolchains for quantization, deployment, and reproducibility.</li>
-            <li>Rigorous benchmarking, safety audits, and reproducible experiments.</li>
+            <li>Enable on-device (and now Windows-targeted) inference with low power draw.</li>
+            <li>Open, auditable toolchains for quantization and deployment.</li>
+            <li>Rigorous benchmarking and reproducible experiments.</li>
           </ul>
         </div>
 
         <div class="card small">
-          <h4 style="margin-bottom:8px;">Ethics & Safety</h4>
-          <p style="color:var(--muted); font-size:14px; line-height:1.6;">
-            Releases follow safety-first practices including adversarial testing, access controls, and transparency. Community contributions are reviewed for safety, reproducibility, and license compatibility.
+          <h4 style="margin-bottom:8px">Ethics & safety</h4>
+          <p style="color:var(--muted);font-size:14px;line-height:1.6">
+            Releases follow safety-first practices: adversarial testing, access controls, and transparency. Community contributions will be evaluated for safety and license compatibility.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Footer / Bottom section -->
-    <footer class="site-footer" role="contentinfo">
-      <div class="footer-left footer">
-        <h4>Hypercloud Intelligence</h4>
-        <p>Hypercloud Intelligence is an independent research and engineering initiative focused on compact, efficient AI models and reproducible deployment pipelines. Founded and led by Ariyan Ahmed (BloxyWave), the project emphasizes open research, robust benchmarking, and accessible tooling.</p>
-        <p class="small" style="margin-top:8px;">Hypercloud Intelligence 2025 © All rights reserved.</p>
+    <footer>
+      <div id="contact">
+        <div style="font-weight:700">Hypercloud Intelligence</div>
+        <div style="color:var(--muted);font-size:13px">Lead: Ariyan Ahmed (BloxyWave) — Developer & maintainer</div>
+        <div style="color:var(--muted);font-size:13px">Contact: <a class="link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a></div>
       </div>
 
-      <div class="footer-right">
-        <div>
-          <div class="small">Contact</div>
-          <div style="margin-top:6px;"><a class="nav-link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a></div>
-        </div>
-
-        <div>
-          <div class="small">Support</div>
-          <div style="margin-top:6px;"><a class="nav-link" href="mailto:contact.hypercloud@gmail.com">contact.hypercloud@gmail.com</a></div>
-        </div>
-
-        <div>
-          <div class="small">Quick links</div>
-          <div style="margin-top:6px;"><a class="nav-link" href="#projects">Projects</a> · <a class="nav-link" href="#about-section">About</a></div>
-        </div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <a class="btn" href="#projects">See projects</a>
+        <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com">Contribute</a>
       </div>
     </footer>
   </main>
 
-  <!-- Modal backdrop (project details) -->
+  <!-- Modal backdrop / project details -->
   <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true" data-open="false">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
-      <button class="close-btn" id="modalClose" aria-label="Close dialog">Close ✕</button>
+      <button class="close-btn" id="modalClose">Close ✕</button>
       <h3 id="modalTitle">Project title</h3>
-      <div id="modalSubtitle" class="small muted" style="margin-bottom:8px; color:var(--muted);"></div>
-      <div id="modalBody" style="margin-top:8px; color:#e9f3ff; line-height:1.6;"></div>
+      <div class="muted" id="modalSubtitle">Short descriptor</div>
+      <div id="modalBody" style="margin-top:12px; color:#e9f3ff;"></div>
 
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:16px; gap:12px; flex-wrap:wrap;">
-        <div id="modalMeta" class="small" style="color:var(--muted);"></div>
-        <div style="display:flex;gap:8px;">
+      <div class="modal-footer">
+        <div class="muted" id="modalMeta">Platform & status</div>
+        <div style="display:flex;gap:8px">
           <a class="btn" id="modalEmail" href="mailto:hypercloudintelligence@gmail.com">Contact</a>
-          <button class="btn primary" id="modalCloseCTA" type="button">Close</button>
+          <a class="btn primary" id="modalCloseCTA" href="#" onclick="document.getElementById('modalClose').click();return false;">Close</a>
         </div>
       </div>
     </div>
   </div>
 
   <script>
-    /* Project content */
+    // Project content map (detailed descriptions shown in modal)
     const PROJECTS = {
       "krix-alpha": {
         title: "Krix alpha",
-        subtitle: "Ultra-optimized, minimal-capacity runtime",
-        platform: "Originally mobile; roadmap: Windows-only",
-        body: `<p><strong>Krix alpha</strong> is a first-stage, ultra-compact inference engine focused on minimal memory use, fast cold starts, and pragmatic feature reduction to run on severely constrained hardware.</p>
-               <p><strong>Approach:</strong> architecture simplification, aggressive integer quantization, fixed token windows, and optimized runtime kernels.</p>
-               <p><strong>Use cases:</strong> telemetry filtering, micro-assistants, embedded decision agents.</p>`
+        subtitle: "Ultra-optimized, minimal-capacity mobile runtime",
+        platform: "Originally mobile; roadmap: Windows-only (current)",
+        body: `<p><strong>Krix alpha</strong> was engineered as a first-stage, ultra-compact inference engine. It focuses on extremely low memory use, fast cold starts, and pragmatic feature set reduction so it can run on very constrained hardware.</p>
+               <p><strong>Technical approach:</strong> architecture simplification, fixed-size token windows, and aggressive integer quantization. Optimized runtime kernels and small binary packaging were prioritized.</p>
+               <p><strong>Use cases:</strong> telemetry filtering, micro-assistants, and embedded decision agents.</p>`
       },
       "dragonpy-lite": {
         title: "Dragonpy lite",
         subtitle: "Compact transformer for on-device tasks",
         platform: "Mobile & edge friendly; Windows migration planned",
-        body: `<p><strong>Dragonpy lite</strong> is engineered for runtime efficiency and integration into applications. It emphasizes a small model size and predictable performance.</p>
-               <p><strong>Approach:</strong> mixed-precision quantization, layer fusion, and optimized kernels for inference on ARM and x86.</p>
-               <p><strong>Use cases:</strong> in-app assistants, game AI, offline inference.</p>`
+        body: `<p><strong>Dragonpy lite</strong> is a compact transformer variant tuned for on-device inference and integration into apps.</p>
+               <p><strong>Technical approach:</strong> mixed precision quantization, layer fusion, optimized ARM kernels; tuned tokenizers for low-variance domains to reduce compute overhead.</p>
+               <p><strong>Use cases:</strong> in-app assistants, game AI modules, and local inference in offline apps.</p>`
       },
       "dragonpy-1": {
         title: "Dragonpy 1.0",
-        subtitle: "Balanced local inference model",
+        subtitle: "First full Dragonpy release for reliable local inference",
         platform: "Local-first; Windows-first roadmap",
-        body: `<p><strong>Dragonpy 1.0</strong> is the initial full release, designed for stable local inference with deterministic behavior and predictable resource usage.</p>
-               <p><strong>Approach:</strong> balanced attention blocks, deterministic runtime, tokenization suited to offline workflows.</p>
-               <p><strong>Use cases:</strong> offline productivity tools, education assistants, robotics prototypes.</p>`
+        body: `<p><strong>Dragonpy 1.0</strong> is the project's first full model release, engineered for predictable resource usage and reliable local inference.</p>
+               <p><strong>Technical approach:</strong> balanced attention blocks, deterministic runtime behavior, and tokenization optimized for common offline tasks.</p>
+               <p><strong>Use cases:</strong> offline productivity tools, education assistants, robotics control prototypes and rapid prototyping environments.</p>`
       },
       "dragonpy-max": {
         title: "Dragonpy Max",
-        subtitle: "Cutdown Sonic variant optimized for mobile throughput (legacy)",
-        platform: "Android-only (legacy); Windows migration under analysis",
-        body: `<p><strong>Dragonpy Max</strong> is a throughput-focused derivative that traded some capability for increased mobile performance and throughput.</p>
-               <p><strong>Approach:</strong> selective head pruning, runtime batching, and native bindings for improved throughput on mobile.</p>`
+        subtitle: "Cutdown Sonic variant optimized for Android throughput",
+        platform: "Android-only (legacy); Windows migration analysis ongoing",
+        body: `<p><strong>Dragonpy Max</strong> is a throughput-oriented cutdown of the Sonic architecture. It focuses on maximizing inference throughput on mobile hardware while preserving practical capabilities.</p>
+               <p><strong>Technical approach:</strong> selective head pruning, runtime batching, JNI bindings for native performance, and pre-warmed token pipelines.</p>
+               <p><strong>Use cases:</strong> on-device summarization, edge NLP services in mobile apps, and user-facing real-time tasks.</p>`
       },
       "dragonpy-sonic": {
         title: "Dragonpy sonic",
         subtitle: "Flagship model developed from first principles",
         platform: "Primary research target; Windows-first development",
-        body: `<p><strong>Dragonpy sonic</strong> is the flagship model under active development. The design prioritizes parameter efficiency, extensible tokenization, and integrated training recipes.</p>
-               <p><strong>Approach:</strong> modular attention shards, performance-focused tokenizer, scalable training, and integrated benchmarking & safety assessments.</p>
-               <p><strong>Status:</strong> active research and iterative evaluation.</p>`
+        body: `<p><strong>Dragonpy sonic</strong> is the flagship model being developed from scratch. Its design prioritizes parameter efficiency, robust tokenization, and extensible training recipes.</p>
+               <p><strong>Technical approach:</strong> modular attention shards, performance-focused tokenizer, scalable training pipelines, and integrated benchmarking and safety audits.</p>
+               <p><strong>Current status:</strong> active research, iterative benchmarking, and safety evaluation.</p>`
       },
       "dragonpy-sonic-gpt4all": {
         title: "Dragonpy sonic (gpt4all)",
         subtitle: "Archived prototype using community models (discontinued)",
         platform: "Archived experimental branch",
-        body: `<p>This archived prototype used community models during early prototyping to explore design choices. It is discontinued and retained for historical and research purposes.</p>`
+        body: `<p>This historical variant used external community models to accelerate prototyping and inform design choices. It is now discontinued and retained for archival and research lessons.</p>
+               <p><strong>Purpose:</strong> provide lessons learned and seed design decisions for the mainline Sonic development.</p>`
       }
     };
 
-    /* Modal handling and project triggers */
+    // Modal and trigger handling
     (function(){
       const modalBackdrop = document.getElementById('modalBackdrop');
       const modalTitle = document.getElementById('modalTitle');
@@ -456,99 +460,76 @@
       const modalBody = document.getElementById('modalBody');
       const modalMeta = document.getElementById('modalMeta');
       const modalClose = document.getElementById('modalClose');
-      const modalCloseCTA = document.getElementById('modalCloseCTA');
       const modalEmail = document.getElementById('modalEmail');
+      const focusableSelectors = 'a[href], button, input, textarea, [tabindex]:not([tabindex="-1"])';
 
+      // Open modal with project key
       function openProject(key) {
-        const p = PROJECTS[key];
-        if(!p) return;
-        modalTitle.textContent = p.title;
-        modalSubtitle.textContent = p.subtitle;
-        modalBody.innerHTML = p.body;
-        modalMeta.textContent = p.platform;
-        modalEmail.href = "mailto:hypercloudintelligence@gmail.com?subject=" + encodeURIComponent("Contribution: " + p.title);
-        modalBackdrop.setAttribute('data-open','true');
-        modalBackdrop.setAttribute('aria-hidden','false');
-        document.body.style.overflow = 'hidden';
+        const data = PROJECTS[key];
+        if(!data) return;
+        modalTitle.textContent = data.title;
+        modalSubtitle.textContent = data.subtitle;
+        modalBody.innerHTML = data.body;
+        modalMeta.textContent = data.platform;
+        modalEmail.href = "mailto:hypercloudintelligence@gmail.com?subject=" + encodeURIComponent("Contribution: " + data.title);
+        modalBackdrop.setAttribute('data-open', 'true');
+        modalBackdrop.setAttribute('aria-hidden', 'false');
+        // focus trap: put focus on close button
         setTimeout(()=> modalClose.focus(), 120);
-        lastFocused = document.activeElement;
+        document.body.style.overflow = 'hidden';
       }
 
+      // Close modal
       function closeModal() {
-        modalBackdrop.setAttribute('data-open','false');
-        modalBackdrop.setAttribute('aria-hidden','true');
+        modalBackdrop.setAttribute('data-open', 'false');
+        modalBackdrop.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
-        if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
 
-      let lastFocused = null;
-      document.querySelectorAll('[data-project]').forEach(el=>{
+      // Wire up project cards
+      document.querySelectorAll('[data-project]').forEach(el => {
         const key = el.getAttribute('data-project');
-        el.addEventListener('click', ()=> openProject(key));
-        el.addEventListener('keydown', (e)=> {
+        el.addEventListener('click', () => openProject(key));
+        el.addEventListener('keypress', (e) => {
           if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openProject(key); }
         });
-        el.addEventListener('focus', ()=> lastFocused = el);
       });
 
+      // Close handlers
       modalClose.addEventListener('click', closeModal);
-      modalCloseCTA.addEventListener('click', closeModal);
-
-      modalBackdrop.addEventListener('click', (ev)=>{
+      document.getElementById('modalCloseCTA').addEventListener('click', closeModal);
+      modalBackdrop.addEventListener('click', (ev) => {
         if(ev.target === modalBackdrop) closeModal();
       });
 
-      document.addEventListener('keydown', (e)=>{
-        if(e.key === 'Escape' && modalBackdrop.getAttribute('data-open') === 'true') closeModal();
-      });
-
-      // Smooth scroll for internal links
-      document.querySelectorAll('a[href^="#"]').forEach(link=>{
-        link.addEventListener('click', function(e){
-          const target = document.querySelector(this.getAttribute('href'));
-          if(target){
-            e.preventDefault();
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            // close mobile menu if open
-            hideMobileMenu();
-          }
-        });
-      });
-    })();
-
-    /* Hamburger menu handling */
-    (function(){
-      const hamburger = document.getElementById('hamburger');
-      const mobileMenu = document.getElementById('mobileMenu');
-
-      function showMobileMenu(){
-        hamburger.setAttribute('aria-expanded','true');
-        mobileMenu.style.display = 'block';
-        mobileMenu.setAttribute('aria-hidden','false');
-      }
-      function hideMobileMenu(){
-        hamburger.setAttribute('aria-expanded','false');
-        mobileMenu.style.display = 'none';
-        mobileMenu.setAttribute('aria-hidden','true');
-      }
-
-      hamburger.addEventListener('click', () => {
-        const isOpen = hamburger.getAttribute('aria-expanded') === 'true';
-        if(isOpen) hideMobileMenu(); else showMobileMenu();
-      });
-
-      // Close mobile menu on outside click
-      document.addEventListener('click', (e) => {
-        const target = e.target;
-        if(!mobileMenu.contains(target) && !hamburger.contains(target)) {
-          hideMobileMenu();
+      // ESC to close
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && modalBackdrop.getAttribute('data-open') === 'true') {
+          closeModal();
         }
       });
 
-      // Hide mobile menu on resize to desktop
-      window.addEventListener('resize', ()=> {
-        if(window.innerWidth > 980) hideMobileMenu();
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if(target) {
+            e.preventDefault();
+            target.scrollIntoView({behavior:'smooth', block:'start'});
+          }
+        });
       });
+
+      // Accessibility: return focus to last focused project card when modal closes
+      let lastFocused = null;
+      document.querySelectorAll('[data-project]').forEach(el => {
+        el.addEventListener('focus', () => lastFocused = el);
+        el.addEventListener('click', () => lastFocused = el);
+      });
+      function returnFocus() {
+        if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+      }
+      modalClose.addEventListener('click', returnFocus);
     })();
   </script>
 </body>
