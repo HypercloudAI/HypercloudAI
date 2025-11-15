@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Hypercloud Intelligence — Home</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg-1: #0f1724;
+      --bg-2: #071027;
+      --card: rgba(255,255,255,0.04);
+      --glass: rgba(255,255,255,0.03);
+      --muted: rgba(255,255,255,0.7);
+      --accent-1: linear-gradient(90deg,#7b2ff7,#ff6ec7,#ffb86b);
+      --accent-2: linear-gradient(90deg,#00c6ff,#0072ff,#8e2de2);
+      --glass-border: rgba(255,255,255,0.06);
+      --radius: 14px;
+      --ease: cubic-bezier(.2,.9,.3,1);
+    }
+
+    /* Reset */
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(123,47,247,0.06), transparent 8%),
+                  radial-gradient(900px 500px at 90% 90%, rgba(0,198,255,0.04), transparent 8%),
+                  linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      color:#eaf0ff;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding:40px 20px;
+      display:flex;
+      justify-content:center;
+      align-items:flex-start;
+    }
+
+    .wrap{
+      width:min(1100px,96%);
+      margin:0 auto 60px;
+    }
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      margin-bottom:28px;
+    }
+
+    .brand{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+    .logo{
+      width:54px;
+      height:54px;
+      border-radius:12px;
+      background: linear-gradient(135deg,#0ea5e9 0%, #7c3aed 100%);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:800;
+      font-family: "Space Grotesk", "Inter", sans-serif;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.55), inset 0 -6px 18px rgba(0,0,0,0.12);
+      color:white;
+      letter-spacing:0.5px;
+      transform:translateZ(0);
+    }
+
+    .brand h2{
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-weight:700;
+      font-size:18px;
+      letter-spacing:0.2px;
+      color: #f2f7ff;
+    }
+    .brand p{
+      font-size:12px;
+      color:var(--muted);
+      margin-top:2px;
+    }
+
+    .cta{
+      display:flex;
+      gap:12px;
+      align-items:center;
+    }
+    .btn{
+      background:transparent;
+      border:1px solid var(--glass-border);
+      padding:10px 14px;
+      border-radius:10px;
+      color:var(--muted);
+      text-decoration:none;
+      font-size:13px;
+      transition: all 220ms var(--ease);
+      backdrop-filter: blur(6px);
+    }
+    .btn.primary{
+      background: linear-gradient(90deg,#7b2ff7 0%, #ff6ec7 50%, #ffb86b 100%);
+      color: #071027;
+      border: none;
+      font-weight:600;
+      box-shadow: 0 10px 30px rgba(123,47,247,0.12);
+    }
+    .btn:hover{transform:translateY(-4px)}
+    .btn.primary:hover{filter:brightness(1.03)}
+
+    /* Hero */
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr 380px;
+      gap:28px;
+      align-items:start;
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
+      border-radius: var(--radius);
+      padding:28px;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 10px 40px rgba(3,6,23,0.6);
+    }
+
+    .hero-left{
+      padding: 28px;
+      position:relative;
+      overflow:visible;
+    }
+
+    .title{
+      font-family: "Space Grotesk", Inter, sans-serif;
+      font-weight:800;
+      font-size: clamp(28px, 6vw, 52px);
+      margin-bottom:10px;
+      line-height:1;
+      letter-spacing:-0.6px;
+      background: var(--accent-1);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: gradientShift 6s linear infinite;
+    }
+
+    @keyframes gradientShift{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    .subtitle{
+      font-size:16px;
+      color:var(--muted);
+      margin-bottom:18px;
+    }
+
+    .meta{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:10px;
+    }
+    .pill{
+      padding:8px 10px;
+      background:var(--card);
+      border-radius:10px;
+      font-size:13px;
+      color:var(--muted);
+      border:1px solid rgba(255,255,255,0.02);
+    }
+
+    /* About */
+    .about{
+      margin-top:18px;
+      color:#dfe9ff;
+      font-size:15px;
+      line-height:1.6;
+    }
+    .about .highlight{
+      font-weight:700;
+      background: var(--accent-2);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color:transparent;
+    }
+
+    /* Projects column */
+    .side{
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+    }
+
+    .project-card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border-radius:12px;
+      padding:16px;
+      border:1px solid var(--glass-border);
+      transition:transform 350ms var(--ease), box-shadow 350ms var(--ease);
+      transform: translateY(0);
+    }
+    .project-card:hover{
+      transform: translateY(-8px);
+      box-shadow: 0 18px 40px rgba(7,12,32,0.6);
+    }
+    .project-title{
+      font-weight:700;
+      font-size:16px;
+      margin-bottom:6px;
+      background: linear-gradient(90deg,#ffd86b,#ff6ec7);
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+    .project-meta{font-size:13px;color:var(--muted)}
+
+    /* Projects grid in main section */
+    .projects{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+      gap:16px;
+      margin-top:22px;
+    }
+
+    /* statement / notice area */
+    .notice{
+      margin-top:22px;
+      padding:14px;
+      border-radius:12px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.03);
+      color: #f6fbff;
+      font-size:14px;
+    }
+    .notice .important{
+      display:inline-block;
+      padding:4px 8px;
+      border-radius:8px;
+      font-weight:600;
+      background: linear-gradient(90deg,#ff6ec7,#7b2ff7);
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+
+    /* roadmap */
+    .grid-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:22px;
+    }
+
+    .card.small{
+      padding:18px;
+    }
+
+    footer{
+      margin-top:34px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    a.link{
+      color:inherit;
+      text-decoration:none;
+      border-bottom:1px dashed rgba(255,255,255,0.06);
+      transition: color 160ms;
+    }
+
+    /* responsive */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr}
+      .title{font-size:40px}
+      .grid-row{grid-template-columns:1fr}
+    }
+
+    /* reduced motion support */
+    @media (prefers-reduced-motion: reduce){
+      .title, .project-card, .btn{transition:none; animation:none}
+    }
+  </style>
+</head>
+<body>
+  <main class="wrap" role="main">
+    <header>
+      <div class="brand" aria-label="Brand">
+        <div class="logo" aria-hidden="true">HC</div>
+        <div>
+          <h2>Hypercloud Intelligence</h2>
+          <p>Research - Lightweight models - Mobile first</p>
+        </div>
+      </div>
+
+      <nav class="cta" aria-label="Primary">
+        <a class="btn" href="#projects">Projects</a>
+        <a class="btn primary" href="#contact">Contribute</a>
+      </nav>
+    </header>
+
+    <section class="hero">
+      <div class="card hero-left" aria-labelledby="heroTitle">
+        <h1 id="heroTitle" class="title">Hypercloud Intelligence</h1>
+
+        <p class="subtitle">A focused effort to design accessible, efficient, and free AI models optimized for mobile and embedded devices.</p>
+
+        <div class="meta" role="list" aria-hidden="false">
+          <div class="pill">Lead maintainer: <strong>Ariyan Ahmed</strong></div>
+          <div class="pill">Online alias: <strong>BloxyWave</strong></div>
+          <div class="pill">Status: <strong>Active development</strong></div>
+          <div class="pill">Age: <strong>11</strong></div>
+        </div>
+
+        <article class="about" aria-labelledby="aboutHeading">
+          <h3 id="aboutHeading" style="margin-top:18px;font-size:15px;color:var(--muted)">About the project</h3>
+          <p>
+            <span class="highlight">Hypercloud Intelligence</span> is a research and engineering project created by developer Ariyan Ahmed (online handle: BloxyWave). Ariyan is an 11 year old prodigy who focuses on compact model engineering, efficiency, and mobile-first deployment.
+          </p>
+
+          <p style="margin-top:10px">
+            The core focus is engineering models and systems that deliver strong capability with minimal resource cost. That includes model architecture research, quantization and pruning pipelines, runtime optimization for Android and other edge platforms, and production-quality packaging.
+          </p>
+        </article>
+
+        <div class="notice" role="note" aria-live="polite">
+          <strong class="important">Declaration</strong>
+          <div style="margin-top:8px">
+            We are working to make an AI model without the help of OpenAI, Gemini, or any external LLMs. See
+            <a class="link" href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank" rel="noopener noreferrer">Wikipedia: Large language model</a>
+            for context on the term. Our goal is to produce powerful AI that is free to use and accessible to everyone.
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="card project-card" aria-labelledby="projectsHeading">
+          <h3 id="projectsHeading" style="font-size:15px;margin-bottom:6px;color:var(--muted)">Featured projects</h3>
+
+          <div class="project" style="margin-top:8px">
+            <div class="project-card" role="article" aria-label="Dragonpy lite">
+              <div class="project-title">Dragonpy lite</div>
+              <div class="project-meta">
+                The first AI model created by Ariyan. Designed to be Android friendly and extremely lightweight. Prioritizes memory efficiency and runtime compatibility for low end devices.
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="project-card" role="article" aria-label="Dragonpy sonic">
+              <div class="project-title">Dragonpy sonic</div>
+              <div class="project-meta">
+                The next-generation, higher-performance model currently in active development. Built to scale beyond the lite variant while remaining optimized for cost-effective deployment.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card small" style="display:flex;flex-direction:column;gap:10px">
+          <div style="font-weight:700;color:var(--muted)">Quick facts</div>
+          <div style="font-size:13px;color:var(--muted)">
+            • Mobile-first engineering and model quantization pipelines.
+            <br>• Open research notes and reproducible experiments.
+            <br>• Minimal-cost runtime and permissive licensing goals.
+          </div>
+        </div>
+
+      </aside>
+    </section>
+
+    <section class="card" style="margin-top:22px">
+      <h3 style="font-size:18px;margin-bottom:8px">Projects & technical notes</h3>
+
+      <div class="projects" aria-live="polite">
+        <div class="project-card" role="article">
+          <div class="project-title">Dragonpy lite</div>
+          <div class="project-meta" style="margin-top:6px">
+            - Architecture: compact transformer with aggressive pruning and layer fusion.
+            <br> - Target: Android AArch64, small memory footprint, <strong>~tens of MBs</strong> model sizes after quantization.
+            <br> - Use cases: on-device assistants, game AI, local inference.
+          </div>
+        </div>
+
+        <div class="project-card" role="article">
+          <div class="project-title">Dragonpy sonic</div>
+          <div class="project-meta" style="margin-top:6px">
+            - Architecture: scaled variant with additional attention heads and improved tokenization.
+            <br> - Target: higher throughput on-device and serverless runtimes.
+            <br> - Focus: scalable tooling for training and inference without dependence on external LLMs.
+          </div>
+        </div>
+
+        <div class="project-card" role="article">
+          <div class="project-title">Tooling & pipeline</div>
+          <div class="project-meta" style="margin-top:6px">
+            We build reproducible pipelines for quantization, pruning, benchmarking, and Android packaging. Emphasis on open formats, explainable results, and efficient inference stacks.
+          </div>
+        </div>
+
+        <div class="project-card" role="article">
+          <div class="project-title">Community & governance</div>
+          <div class="project-meta" style="margin-top:6px">
+            The project intends to be community driven. Contributions will be evaluated for safety, reproducibility, and license compatibility. Research notes will be published to foster collaboration.
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-row" style="margin-top:18px">
+        <div class="card small">
+          <h4 style="margin-bottom:8px">Technical goals</h4>
+          <ul style="color:var(--muted);font-size:14px;line-height:1.6;margin-left:16px">
+            <li>Maximize compute efficiency per parameter.</li>
+            <li>Enable on-device inference with low power draw.</li>
+            <li>Open toolchains for quantization and deployment.</li>
+            <li>Rigorous benchmarking and reproducible tests.</li>
+          </ul>
+        </div>
+
+        <div class="card small">
+          <h4 style="margin-bottom:8px">Ethics & safety</h4>
+          <p style="color:var(--muted);font-size:14px;line-height:1.6">
+            Research and release will follow best practices for responsible AI. Safety testing, adversarial analysis, and access controls are part of the roadmap. Prioritizing user privacy and transparency.
+          </p>
+        </div>
+      </div>
+
+    </section>
+
+    <footer>
+      <div id="contact">
+        <div style="font-weight:700">Hypercloud Intelligence</div>
+        <div style="color:var(--muted);font-size:13px">Lead: Ariyan Ahmed (BloxyWave) - Developer and maintainer</div>
+      </div>
+
+      <div style="display:flex;gap:10px;align-items:center">
+        <a class="btn" href="#projects">See projects</a>
+        <a class="btn primary" href="#" onclick="alert('Thanks for your interest. For contributions open an issue or PR on the repository.');return false">Contribute</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    // Lightweight script - no telemetry, no external calls
+    (function(){
+      // Smooth scroll for internal links
+      document.querySelectorAll('a[href^="#"]').forEach(function(link){
+        link.addEventListener('click', function(e){
+          var target = document.querySelector(this.getAttribute('href'));
+          if(target){
+            e.preventDefault();
+            target.scrollIntoView({behavior:'smooth',block:'start'});
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
