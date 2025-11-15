@@ -14,12 +14,13 @@
       --bg-2: #071027;
       --card: rgba(255,255,255,0.04);
       --glass: rgba(255,255,255,0.03);
-      --muted: rgba(255,255,255,0.7);
+      --muted: rgba(255,255,255,0.75);
       --accent-1: linear-gradient(90deg,#7b2ff7,#ff6ec7,#ffb86b);
       --accent-2: linear-gradient(90deg,#00c6ff,#0072ff,#8e2de2);
       --glass-border: rgba(255,255,255,0.06);
       --radius: 14px;
       --ease: cubic-bezier(.2,.9,.3,1);
+      --llm-gradient: linear-gradient(90deg,#ffd86b,#ff6ec7,#7b2ff7);
     }
 
     /* Reset */
@@ -159,7 +160,7 @@
     .subtitle{
       font-size:16px;
       color:var(--muted);
-      margin-bottom:18px;
+      margin-bottom:12px;
     }
 
     .meta{
@@ -190,6 +191,31 @@
       background-clip: text;
       -webkit-background-clip: text;
       color:transparent;
+    }
+
+    /* LLM specialized link */
+    .llm-link{
+      background: var(--llm-gradient);
+      background-size:200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      font-weight:700;
+      text-decoration:none;
+      padding:2px 4px;
+      border-radius:6px;
+      transition: transform 220ms var(--ease), filter 220ms var(--ease);
+      display:inline-block;
+      cursor:pointer;
+      box-shadow: 0 6px 20px rgba(123,47,247,0.07);
+      animation: llmShift 5.5s linear infinite;
+    }
+    .llm-link:hover{ transform:translateY(-3px) scale(1.02); filter:brightness(1.06); }
+
+    @keyframes llmShift{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
     }
 
     /* Projects column */
@@ -298,13 +324,13 @@
         <div class="logo" aria-hidden="true">HC</div>
         <div>
           <h2>Hypercloud Intelligence</h2>
-          <p>Research - Lightweight models - Mobile first</p>
+          <p>Research · Lightweight models · Mobile-first deployment</p>
         </div>
       </div>
 
       <nav class="cta" aria-label="Primary">
         <a class="btn" href="#projects">Projects</a>
-        <a class="btn primary" href="#contact">Contribute</a>
+        <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com">Contribute</a>
       </nav>
     </header>
 
@@ -312,7 +338,7 @@
       <div class="card hero-left" aria-labelledby="heroTitle">
         <h1 id="heroTitle" class="title">Hypercloud Intelligence</h1>
 
-        <p class="subtitle">A focused effort to design accessible, efficient, and free AI models optimized for mobile and embedded devices.</p>
+        <p class="subtitle">A focused engineering effort to design efficient, accessible, and fully open AI models optimized for mobile and edge deployment.</p>
 
         <div class="meta" role="list" aria-hidden="false">
           <div class="pill">Lead maintainer: <strong>Ariyan Ahmed</strong></div>
@@ -324,20 +350,20 @@
         <article class="about" aria-labelledby="aboutHeading">
           <h3 id="aboutHeading" style="margin-top:18px;font-size:15px;color:var(--muted)">About the project</h3>
           <p>
-            <span class="highlight">Hypercloud Intelligence</span> is a research and engineering project created by developer Ariyan Ahmed (online handle: BloxyWave). Ariyan is an 11 year old prodigy who focuses on compact model engineering, efficiency, and mobile-first deployment.
+            <strong class="highlight">Hypercloud Intelligence</strong> is a research and engineering initiative created and led by developer Ariyan Ahmed (online: <strong>BloxyWave</strong>). The project focuses on compact model architecture, aggressive optimization, and production-ready packaging for Android and edge devices.
           </p>
 
           <p style="margin-top:10px">
-            The core focus is engineering models and systems that deliver strong capability with minimal resource cost. That includes model architecture research, quantization and pruning pipelines, runtime optimization for Android and other edge platforms, and production-quality packaging.
+            The engineering goals include efficient architectures, custom quantization and pruning pipelines, runtime optimizations, and reproducible tooling for evaluation. Emphasis is on enabling powerful on-device inference while keeping compute and monetary costs minimal.
           </p>
         </article>
 
         <div class="notice" role="note" aria-live="polite">
           <strong class="important">Declaration</strong>
-          <div style="margin-top:8px">
-            We are working to make an AI model without the help of OpenAI, Gemini, or any external LLMs. See
-            <a class="link" href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank" rel="noopener noreferrer">Wikipedia: Large language model</a>
-            for context on the term. Our goal is to produce powerful AI that is free to use and accessible to everyone.
+          <div style="margin-top:8px; color: var(--muted)">
+            We are working to make an AI model without the help of OpenAI, Gemini, or any external
+            <a class="llm-link" href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank" rel="noopener noreferrer">LLM</a>.
+            See <a class="link" href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank" rel="noopener noreferrer">Wikipedia: Large language model</a> for background on the term. Our objective is to create powerful AI that is free to use, deployable locally, and accessible worldwide.
           </div>
         </div>
       </div>
@@ -347,10 +373,37 @@
           <h3 id="projectsHeading" style="font-size:15px;margin-bottom:6px;color:var(--muted)">Featured projects</h3>
 
           <div class="project" style="margin-top:8px">
+            <div class="project-card" role="article" aria-label="Krix alpha">
+              <div class="project-title">Krix alpha</div>
+              <div class="project-meta">
+                The first mobile-primed release: extremely optimized for Android and local inference. Minimal memory footprint and fast cold-start times; intended for low-resource platforms. Strengths: battery-friendly, tiny disk use; limitations: intentionally weak model capacity.
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
             <div class="project-card" role="article" aria-label="Dragonpy lite">
               <div class="project-title">Dragonpy lite</div>
               <div class="project-meta">
-                The first AI model created by Ariyan. Designed to be Android friendly and extremely lightweight. Prioritizes memory efficiency and runtime compatibility for low end devices.
+                A compact transformer variant prioritizing runtime efficiency and compatibility. Target: on-device assistants, game AI, and local inference on constrained hardware after quantization.
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="project-card" role="article" aria-label="Dragonpy 1.0">
+              <div class="project-title">Dragonpy 1.0</div>
+              <div class="project-meta">
+                The first full model release in the Dragonpy family. Designed for local inference with a balanced tradeoff between capability and resource cost. Reliable for offline tasks and prototype deployments.
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="project-card" role="article" aria-label="Dragonpy Max">
+              <div class="project-title">Dragonpy Max</div>
+              <div class="project-meta">
+                A cutdown, Android-only derivative of the Sonic line — optimized for real-world mobile throughput with aggressive pruning while preserving practical capability for edge services.
               </div>
             </div>
 
@@ -359,7 +412,16 @@
             <div class="project-card" role="article" aria-label="Dragonpy sonic">
               <div class="project-title">Dragonpy sonic</div>
               <div class="project-meta">
-                The next-generation, higher-performance model currently in active development. Built to scale beyond the lite variant while remaining optimized for cost-effective deployment.
+                The primary high-performance model being developed from scratch. Focuses on scalable architecture, expandable tokenization, and efficient training pipelines. Still under active development with a strong emphasis on open research.
+              </div>
+            </div>
+
+            <div style="height:10px"></div>
+
+            <div class="project-card" role="article" aria-label="Dragonpy sonic (gpt4all)">
+              <div class="project-title">Dragonpy sonic (gpt4all)</div>
+              <div class="project-meta">
+                A historical variant that used external assistance and community models during prototyping. Status: discontinued — retained for archival and learning purposes.
               </div>
             </div>
           </div>
@@ -371,6 +433,7 @@
             • Mobile-first engineering and model quantization pipelines.
             <br>• Open research notes and reproducible experiments.
             <br>• Minimal-cost runtime and permissive licensing goals.
+            <br>• Contact: <a class="link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a>
           </div>
         </div>
 
@@ -382,20 +445,54 @@
 
       <div class="projects" aria-live="polite">
         <div class="project-card" role="article">
+          <div class="project-title">Krix alpha</div>
+          <div class="project-meta" style="margin-top:6px">
+            - Focus: extreme mobile optimization and minimal compute overhead.
+            <br> - Approach: architecture simplification, aggressive quantization, on-device runtime micro-optimizations.
+            <br> - Use cases: embedded assistants, telemetry filtering, lightweight decision agents.
+          </div>
+        </div>
+
+        <div class="project-card" role="article">
+          <div class="project-title">Dragonpy 1.0</div>
+          <div class="project-meta" style="margin-top:6px">
+            - Focus: robust, local inference with predictable resource usage.
+            <br> - Approach: compact attention blocks, tokenization tuned for low-vocabulary domains, and deterministic runtime behavior.
+            <br> - Use cases: offline productivity tools, education assistants, robotics control prototyping.
+          </div>
+        </div>
+
+        <div class="project-card" role="article">
           <div class="project-title">Dragonpy lite</div>
           <div class="project-meta" style="margin-top:6px">
-            - Architecture: compact transformer with aggressive pruning and layer fusion.
-            <br> - Target: Android AArch64, small memory footprint, <strong>~tens of MBs</strong> model sizes after quantization.
-            <br> - Use cases: on-device assistants, game AI, local inference.
+            - Focus: smallest practical footprint at acceptable capability.
+            <br> - Approach: mixed precision quantization, layer fusion, and optimized inference kernels for ARM devices.
+            <br> - Use cases: games, local chat companions, in-app microservices.
+          </div>
+        </div>
+
+        <div class="project-card" role="article">
+          <div class="project-title">Dragonpy Max</div>
+          <div class="project-meta" style="margin-top:6px">
+            - Focus: Android-only, throughput-oriented variant.
+            <br> - Approach: selective head pruning, runtime batching, and optimized token pipelines for JNI bindings.
+            <br> - Use cases: on-device summarization, edge NLP services in mobile apps.
           </div>
         </div>
 
         <div class="project-card" role="article">
           <div class="project-title">Dragonpy sonic</div>
           <div class="project-meta" style="margin-top:6px">
-            - Architecture: scaled variant with additional attention heads and improved tokenization.
-            <br> - Target: higher throughput on-device and serverless runtimes.
-            <br> - Focus: scalable tooling for training and inference without dependence on external LLMs.
+            - Focus: flagship model being engineered from first principles.
+            <br> - Approach: modular attention shards, efficient tokenizer, and training recipes that prioritize parameter efficiency.
+            <br> - Current status: active research; benchmarking and safety audits ongoing.
+          </div>
+        </div>
+
+        <div class="project-card" role="article">
+          <div class="project-title">Dragonpy sonic (gpt4all) — discontinued</div>
+          <div class="project-meta" style="margin-top:6px">
+            - Note: an archived experimental branch that used external community models during iteration. It helped seed design decisions but will not be continued as part of the main project.
           </div>
         </div>
 
@@ -438,12 +535,13 @@
     <footer>
       <div id="contact">
         <div style="font-weight:700">Hypercloud Intelligence</div>
-        <div style="color:var(--muted);font-size:13px">Lead: Ariyan Ahmed (BloxyWave) - Developer and maintainer</div>
+        <div style="color:var(--muted);font-size:13px">Lead: Ariyan Ahmed (BloxyWave) — Developer and maintainer</div>
+        <div style="color:var(--muted);font-size:13px">Contributions & inquiries: <a class="link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a></div>
       </div>
 
       <div style="display:flex;gap:10px;align-items:center">
         <a class="btn" href="#projects">See projects</a>
-        <a class="btn primary" href="#" onclick="alert('Thanks for your interest. For contributions open an issue or PR on the repository.');return false">Contribute</a>
+        <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com">Contribute</a>
       </div>
     </footer>
   </main>
