@@ -10,310 +10,169 @@
 
   <style>
     :root{
-      --bg-1: #0f1724;
-      --bg-2: #071027;
-      --card: rgba(255,255,255,0.04);
+      --bg-1: #071027;
+      --bg-2: #071a2b;
       --glass: rgba(255,255,255,0.03);
-      --muted: rgba(255,255,255,0.75);
+      --muted: rgba(255,255,255,0.78);
       --accent-1: linear-gradient(90deg,#7b2ff7,#ff6ec7,#ffb86b);
       --accent-2: linear-gradient(90deg,#00c6ff,#0072ff,#8e2de2);
-      --glass-border: rgba(255,255,255,0.06);
-      --radius: 14px;
-      --ease: cubic-bezier(.2,.9,.3,1);
       --llm-gradient: linear-gradient(90deg,#ffd86b,#ff6ec7,#7b2ff7);
+      --radius: 14px;
+      --ease: cubic-bezier(.17,.84,.44,1);
+      --glass-border: rgba(255,255,255,0.06);
+      --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     }
 
-    /* Reset */
+    /* Basic reset */
     *{box-sizing:border-box;margin:0;padding:0}
     html,body{height:100%}
     body{
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: radial-gradient(1200px 600px at 10% 10%, rgba(123,47,247,0.06), transparent 8%),
-                  radial-gradient(900px 500px at 90% 90%, rgba(0,198,255,0.04), transparent 8%),
-                  linear-gradient(180deg,var(--bg-1),var(--bg-2));
-      color:#eaf0ff;
+      background:
+        radial-gradient(900px 500px at 10% 10%, rgba(123,47,247,0.04), transparent 7%),
+        radial-gradient(800px 420px at 90% 90%, rgba(0,198,255,0.03), transparent 7%),
+        linear-gradient(180deg,var(--bg-1),var(--bg-2));
+      color:#eef6ff;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
-      line-height:1.45;
-      padding:40px 20px;
+      padding:36px 20px;
       display:flex;
       justify-content:center;
       align-items:flex-start;
     }
 
-    .wrap{
-      width:min(1100px,96%);
-      margin:0 auto 60px;
-    }
+    /* Layout container */
+    .wrap{ width:min(1100px,96%); margin:0 auto 60px; animation:contentFade 600ms var(--ease) both; }
+    @keyframes contentFade { from {opacity:0; transform: translateY(8px)} to {opacity:1; transform: translateY(0)} }
 
-    header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:20px;
-      margin-bottom:28px;
-    }
-
-    .brand{
-      display:flex;
-      gap:14px;
-      align-items:center;
-    }
+    header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; gap:18px; }
+    .brand{ display:flex; gap:14px; align-items:center; }
     .logo{
-      width:54px;
-      height:54px;
-      border-radius:12px;
+      width:56px; height:56px; border-radius:12px;
       background: linear-gradient(135deg,#0ea5e9 0%, #7c3aed 100%);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:800;
-      font-family: "Space Grotesk", "Inter", sans-serif;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.55), inset 0 -6px 18px rgba(0,0,0,0.12);
-      color:white;
-      letter-spacing:0.5px;
-      transform:translateZ(0);
+      display:flex; align-items:center; justify-content:center; font-weight:800; font-family:"Space Grotesk", Inter, sans-serif;
+      color:white; box-shadow: 0 10px 30px rgba(0,0,0,0.55), inset 0 -6px 18px rgba(0,0,0,0.12);
     }
+    .brand h2{ font-family:"Space Grotesk", Inter, sans-serif; font-weight:700; font-size:18px; color:#f2f7ff; }
+    .brand p{ font-size:12px; color:var(--muted); margin-top:2px; }
 
-    .brand h2{
-      font-family: "Space Grotesk", Inter, sans-serif;
-      font-weight:700;
-      font-size:18px;
-      letter-spacing:0.2px;
-      color: #f2f7ff;
-    }
-    .brand p{
-      font-size:12px;
-      color:var(--muted);
-      margin-top:2px;
-    }
-
-    .cta{
-      display:flex;
-      gap:12px;
-      align-items:center;
-    }
+    .cta{ display:flex; gap:12px; align-items:center; }
     .btn{
-      background:transparent;
-      border:1px solid var(--glass-border);
-      padding:10px 14px;
-      border-radius:10px;
-      color:var(--muted);
-      text-decoration:none;
-      font-size:13px;
-      transition: all 220ms var(--ease);
-      backdrop-filter: blur(6px);
+      background:transparent; border:1px solid var(--glass-border); padding:10px 14px; border-radius:10px;
+      color:var(--muted); text-decoration:none; font-size:13px; transition:all 250ms var(--ease); backdrop-filter: blur(6px);
     }
     .btn.primary{
       background: linear-gradient(90deg,#7b2ff7 0%, #ff6ec7 50%, #ffb86b 100%);
-      color: #071027;
-      border: none;
-      font-weight:600;
-      box-shadow: 0 10px 30px rgba(123,47,247,0.12);
+      color:#071027; border:none; font-weight:600; box-shadow: 0 10px 30px rgba(123,47,247,0.12);
     }
-    .btn:hover{transform:translateY(-4px)}
-    .btn.primary:hover{filter:brightness(1.03)}
+    .btn:hover{ transform: translateY(-4px) }
 
-    /* Hero */
-    .hero{
-      display:grid;
-      grid-template-columns: 1fr 380px;
-      gap:28px;
-      align-items:start;
-    }
+    /* Hero & layout */
+    .hero{ display:grid; grid-template-columns: 1fr 380px; gap:26px; align-items:start; }
+    .card{ background: var(--card-bg); border-radius: var(--radius); padding:26px; border:1px solid var(--glass-border); box-shadow: 0 12px 40px rgba(3,6,23,0.6); }
+    .hero-left{ padding:22px; position:relative; overflow:visible; }
 
-    .card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.015));
-      border-radius: var(--radius);
-      padding:28px;
-      border: 1px solid var(--glass-border);
-      box-shadow: 0 10px 40px rgba(3,6,23,0.6);
-    }
-
-    .hero-left{
-      padding: 28px;
-      position:relative;
-      overflow:visible;
-    }
-
+    /* Title gradient animation - slower, smoother */
     .title{
-      font-family: "Space Grotesk", Inter, sans-serif;
-      font-weight:800;
-      font-size: clamp(28px, 6vw, 52px);
-      margin-bottom:10px;
-      line-height:1;
-      letter-spacing:-0.6px;
-      background: var(--accent-1);
-      background-size: 200% 200%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      animation: gradientShift 6s linear infinite;
+      font-family:"Space Grotesk", Inter, sans-serif; font-weight:800;
+      font-size: clamp(30px, 6vw, 56px); line-height:1; letter-spacing:-0.6px;
+      background: var(--accent-1); background-size:220% 220%;
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+      animation: gradientFlow 9s linear infinite;
+      transform-origin:center;
     }
+    @keyframes gradientFlow { 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
 
-    @keyframes gradientShift{
-      0%{background-position:0% 50%}
-      50%{background-position:100% 50%}
-      100%{background-position:0% 50%}
-    }
+    .subtitle{ font-size:15px; color:var(--muted); margin-top:8px; margin-bottom:12px; opacity:0.98; }
+    .meta{ display:flex; gap:12px; flex-wrap:wrap; margin-top:10px; }
+    .pill{ padding:8px 10px; background:rgba(255,255,255,0.02); border-radius:10px; font-size:13px; color:var(--muted); border:1px solid rgba(255,255,255,0.02); }
 
-    .subtitle{
-      font-size:16px;
-      color:var(--muted);
-      margin-bottom:12px;
-    }
+    .about{ margin-top:18px; color:#dfe9ff; font-size:15px; line-height:1.6; }
+    .about .highlight{ font-weight:700; background: var(--accent-2); -webkit-background-clip:text; color:transparent; }
 
-    .meta{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:10px;
-    }
-    .pill{
-      padding:8px 10px;
-      background:var(--card);
-      border-radius:10px;
-      font-size:13px;
-      color:var(--muted);
-      border:1px solid rgba(255,255,255,0.02);
-    }
-
-    /* About */
-    .about{
-      margin-top:18px;
-      color:#dfe9ff;
-      font-size:15px;
-      line-height:1.6;
-    }
-    .about .highlight{
-      font-weight:700;
-      background: var(--accent-2);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color:transparent;
-    }
-
-    /* LLM specialized link */
+    /* LLM special link (only the word) */
     .llm-link{
-      background: var(--llm-gradient);
-      background-size:200% 200%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      font-weight:700;
-      text-decoration:none;
-      padding:2px 4px;
-      border-radius:6px;
-      transition: transform 220ms var(--ease), filter 220ms var(--ease);
-      display:inline-block;
-      cursor:pointer;
-      box-shadow: 0 6px 20px rgba(123,47,247,0.07);
-      animation: llmShift 5.5s linear infinite;
+      background: var(--llm-gradient); background-size:200% 200%;
+      -webkit-background-clip: text; background-clip: text; color:transparent;
+      font-weight:700; text-decoration:none; padding:2px 6px; border-radius:6px;
+      display:inline-block; transition: transform 260ms var(--ease), filter 260ms var(--ease);
+      box-shadow: 0 8px 30px rgba(123,47,247,0.06);
+      animation: llmPulse 6s ease-in-out infinite;
     }
-    .llm-link:hover{ transform:translateY(-3px) scale(1.02); filter:brightness(1.06); }
+    .llm-link:hover{ transform: translateY(-3px) scale(1.02); filter:brightness(1.06); }
+    @keyframes llmPulse { 0%{ background-position:0% 50% } 50%{ background-position:100% 50% } 100%{ background-position:0% 50% } }
 
-    @keyframes llmShift{
-      0%{background-position:0% 50%}
-      50%{background-position:100% 50%}
-      100%{background-position:0% 50%}
+    /* prominent platform shift notice */
+    .platform-note{
+      margin-top:18px; border-radius:12px; padding:14px; background:linear-gradient(90deg, rgba(123,47,247,0.06), rgba(0,198,255,0.02));
+      border:1px solid rgba(255,255,255,0.03); color:#eef6ff; font-size:15px;
+      display:flex; gap:12px; align-items:flex-start; box-shadow: 0 8px 30px rgba(3,6,23,0.45);
+      animation: slideIn 700ms var(--ease) both;
     }
+    @keyframes slideIn { from {opacity:0; transform: translateY(8px)} to {opacity:1; transform: translateY(0)} }
 
-    /* Projects column */
-    .side{
-      display:flex;
-      flex-direction:column;
-      gap:18px;
-    }
+    .platform-note strong{ font-weight:700; color: #fff; }
 
+    /* Side project column */
+    .side{ display:flex; flex-direction:column; gap:16px; }
     .project-card{
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:12px;
-      padding:16px;
-      border:1px solid var(--glass-border);
-      transition:transform 350ms var(--ease), box-shadow 350ms var(--ease);
-      transform: translateY(0);
-    }
-    .project-card:hover{
-      transform: translateY(-8px);
-      box-shadow: 0 18px 40px rgba(7,12,32,0.6);
-    }
-    .project-title{
-      font-weight:700;
-      font-size:16px;
-      margin-bottom:6px;
-      background: linear-gradient(90deg,#ffd86b,#ff6ec7);
-      -webkit-background-clip:text;
-      color:transparent;
-    }
-    .project-meta{font-size:13px;color:var(--muted)}
-
-    /* Projects grid in main section */
-    .projects{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-      gap:16px;
-      margin-top:22px;
-    }
-
-    /* statement / notice area */
-    .notice{
-      margin-top:22px;
-      padding:14px;
-      border-radius:12px;
       background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
-      border:1px solid rgba(255,255,255,0.03);
-      color: #f6fbff;
-      font-size:14px;
+      border-radius:12px; padding:14px; border:1px solid var(--glass-border);
+      transition: transform 380ms var(--ease), box-shadow 380ms var(--ease);
+      cursor:pointer;
+      transform-style:preserve-3d;
+      will-change: transform;
+      display:block;
     }
-    .notice .important{
-      display:inline-block;
-      padding:4px 8px;
-      border-radius:8px;
-      font-weight:600;
-      background: linear-gradient(90deg,#ff6ec7,#7b2ff7);
-      -webkit-background-clip:text;
-      color:transparent;
-    }
+    .project-card:hover{ transform: translateY(-8px) rotateX(2deg); box-shadow: 0 22px 50px rgba(7,12,32,0.6); }
+    .project-title{ font-weight:700; font-size:15px; margin-bottom:6px; background: linear-gradient(90deg,#ffd86b,#ff6ec7); -webkit-background-clip:text; color:transparent; }
+    .project-meta{ font-size:13px; color:var(--muted); }
 
-    /* roadmap */
-    .grid-row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:16px;
-      margin-top:22px;
-    }
+    /* Projects grid (main) */
+    .projects{ display:grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap:14px; margin-top:20px; }
 
-    .card.small{
-      padding:18px;
+    /* Modal (project details) */
+    .modal-backdrop{
+      position:fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:1200;
+      background: rgba(2,6,20,0.6); backdrop-filter: blur(6px);
+      animation: fadeBg 240ms ease-out both;
     }
+    .modal-backdrop[data-open="true"]{ display:flex; }
+    @keyframes fadeBg { from {opacity:0} to {opacity:1} }
 
-    footer{
-      margin-top:34px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:20px;
-      color:var(--muted);
-      font-size:13px;
+    .modal{
+      width:min(880px,94%); max-height:86vh; overflow:auto; border-radius:14px; padding:22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.06); box-shadow: 0 30px 90px rgba(3,6,23,0.7);
+      transform: translateY(12px) scale(0.98);
+      animation: popIn 300ms var(--ease) both;
     }
+    @keyframes popIn { from {opacity:0; transform: translateY(12px) scale(0.98)} to {opacity:1; transform: translateY(0) scale(1)} }
 
-    a.link{
-      color:inherit;
-      text-decoration:none;
-      border-bottom:1px dashed rgba(255,255,255,0.06);
-      transition: color 160ms;
+    .modal h3{ font-size:20px; margin-bottom:8px; }
+    .modal p{ color:#e6f0ff; line-height:1.6; margin-bottom:10px; }
+    .modal .meta{ margin-top:8px; margin-bottom:12px; gap:8px; }
+    .close-btn{
+      background:transparent; border:1px solid rgba(255,255,255,0.06); padding:8px 10px; border-radius:10px; color:var(--muted);
+      cursor:pointer; float:right;
     }
+    .modal-footer{ display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:16px; flex-wrap:wrap; }
+    .muted{ color:var(--muted); font-size:13px; }
 
-    /* responsive */
+    footer{ margin-top:32px; display:flex; justify-content:space-between; gap:16px; align-items:center; color:var(--muted); font-size:13px; flex-wrap:wrap; }
+
+    a.link{ color:inherit; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,0.06); transition: color 160ms; }
+
+    /* Responsive */
     @media (max-width:980px){
-      .hero{grid-template-columns:1fr}
-      .title{font-size:40px}
-      .grid-row{grid-template-columns:1fr}
+      .hero{ grid-template-columns:1fr; }
+      .title{ font-size:40px }
+      .modal{ width:94% }
     }
 
-    /* reduced motion support */
+    /* prefers-reduced-motion */
     @media (prefers-reduced-motion: reduce){
-      .title, .project-card, .btn{transition:none; animation:none}
+      .title, .project-card, .btn, .modal, .modal-backdrop { animation: none; transition: none; }
     }
   </style>
 </head>
@@ -324,189 +183,167 @@
         <div class="logo" aria-hidden="true">HC</div>
         <div>
           <h2>Hypercloud Intelligence</h2>
-          <p>Research · Lightweight models · Mobile-first deployment</p>
+          <p>Research · Lightweight models · Production packaging</p>
         </div>
       </div>
 
       <nav class="cta" aria-label="Primary">
-        <a class="btn" href="#projects">Projects</a>
+        <a class="btn" href="#projects" id="jump-projects">Projects</a>
         <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com">Contribute</a>
       </nav>
     </header>
 
-    <section class="hero">
-      <div class="card hero-left" aria-labelledby="heroTitle">
+    <section class="hero" aria-labelledby="heroTitle">
+      <div class="card hero-left">
         <h1 id="heroTitle" class="title">Hypercloud Intelligence</h1>
 
-        <p class="subtitle">A focused engineering effort to design efficient, accessible, and fully open AI models optimized for mobile and edge deployment.</p>
+        <p class="subtitle">Focused engineering for efficient, accessible AI models with real-world deployment goals.</p>
 
         <div class="meta" role="list" aria-hidden="false">
-          <div class="pill">Lead maintainer: <strong>Ariyan Ahmed</strong></div>
-          <div class="pill">Online alias: <strong>BloxyWave</strong></div>
-          <div class="pill">Status: <strong>Active development</strong></div>
+          <div class="pill">Lead: <strong>Ariyan Ahmed</strong></div>
+          <div class="pill">Alias: <strong>BloxyWave</strong></div>
+          <div class="pill">Status: <strong>Active</strong></div>
           <div class="pill">Age: <strong>11</strong></div>
         </div>
 
         <article class="about" aria-labelledby="aboutHeading">
-          <h3 id="aboutHeading" style="margin-top:18px;font-size:15px;color:var(--muted)">About the project</h3>
+          <h3 id="aboutHeading" style="margin-top:16px;font-size:15px;color:var(--muted)">About</h3>
           <p>
-            <strong class="highlight">Hypercloud Intelligence</strong> is a research and engineering initiative created and led by developer Ariyan Ahmed (online: <strong>BloxyWave</strong>). The project focuses on compact model architecture, aggressive optimization, and production-ready packaging for Android and edge devices.
+            <strong class="highlight">Hypercloud Intelligence</strong> is a research and engineering initiative founded and led by developer Ariyan Ahmed (online: <strong>BloxyWave</strong>).
+            The project concentrates on compact architectures, rigorous optimization, and packaging aimed at real-world, low-cost deployments.
           </p>
 
           <p style="margin-top:10px">
-            The engineering goals include efficient architectures, custom quantization and pruning pipelines, runtime optimizations, and reproducible tooling for evaluation. Emphasis is on enabling powerful on-device inference while keeping compute and monetary costs minimal.
+            Engineering priorities include architecture design, quantization & pruning pipelines, runtime optimization for target platforms, and reproducible toolchains for benchmarking and deployment.
           </p>
         </article>
 
-        <div class="notice" role="note" aria-live="polite">
-          <strong class="important">Declaration</strong>
-          <div style="margin-top:8px; color: var(--muted)">
-            We are working to make an AI model without the help of OpenAI, Gemini, or any external
-            <a class="llm-link" href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank" rel="noopener noreferrer">LLM</a>.
-            See <a class="link" href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank" rel="noopener noreferrer">Wikipedia: Large language model</a> for background on the term. Our objective is to create powerful AI that is free to use, deployable locally, and accessible worldwide.
+        <!-- Declaration with only the single clickable LLM word -->
+        <div class="platform-note" aria-live="polite">
+          <div style="flex:1">
+            <strong>Declaration</strong>
+            <div style="margin-top:8px; color:var(--muted); font-size:14px;">
+              We are working to build an AI model without the assistance of OpenAI, Gemini, or any external
+              <a class="llm-link" href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank" rel="noopener noreferrer">LLM</a>.
+              Our objective is to create powerful AI that is free to use and deployable locally.
+            </div>
+          </div>
+        </div>
+
+        <!-- Clear, professional platform shift -->
+        <div class="platform-note" style="margin-top:14px;">
+          <div style="flex:1">
+            <strong>Platform focus update</strong>
+            <div style="margin-top:8px; color:var(--muted); font-size:14px;">
+              During early development we focused on Android. <strong>Moving forward, Hypercloud Intelligence is prioritizing Windows-only projects.</strong>
+              This shift enables deeper integration, richer tooling, and expanded compute options for development and distribution.
+            </div>
           </div>
         </div>
       </div>
 
-      <aside class="side">
-        <div class="card project-card" aria-labelledby="projectsHeading">
-          <h3 id="projectsHeading" style="font-size:15px;margin-bottom:6px;color:var(--muted)">Featured projects</h3>
+      <!-- Right column: Projects list (clickable) -->
+      <aside class="side" aria-labelledby="projectsHeading">
+        <div class="card project-card" id="projectsSummary" aria-hidden="false">
+          <h3 id="projectsHeading" style="font-size:15px;margin-bottom:8px;color:var(--muted)">Featured projects (click any card)</h3>
 
-          <div class="project" style="margin-top:8px">
-            <div class="project-card" role="article" aria-label="Krix alpha">
-              <div class="project-title">Krix alpha</div>
-              <div class="project-meta">
-                The first mobile-primed release: extremely optimized for Android and local inference. Minimal memory footprint and fast cold-start times; intended for low-resource platforms. Strengths: battery-friendly, tiny disk use; limitations: intentionally weak model capacity.
-              </div>
-            </div>
+          <!-- Each card uses data-project to identify modal content -->
+          <div class="project-card" role="button" tabindex="0" data-project="krix-alpha" aria-label="Krix alpha">
+            <div class="project-title">Krix alpha</div>
+            <div class="project-meta">A first-stage mobile-optimized release: tiny footprint and fast startup; intentionally low capacity for ultra-low-resource scenarios.</div>
+          </div>
 
-            <div style="height:10px"></div>
+          <div style="height:10px"></div>
 
-            <div class="project-card" role="article" aria-label="Dragonpy lite">
-              <div class="project-title">Dragonpy lite</div>
-              <div class="project-meta">
-                A compact transformer variant prioritizing runtime efficiency and compatibility. Target: on-device assistants, game AI, and local inference on constrained hardware after quantization.
-              </div>
-            </div>
+          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-lite" aria-label="Dragonpy lite">
+            <div class="project-title">Dragonpy lite</div>
+            <div class="project-meta">A compact runtime-friendly transformer variant tuned for on-device inference and integration into apps.</div>
+          </div>
 
-            <div style="height:10px"></div>
+          <div style="height:10px"></div>
 
-            <div class="project-card" role="article" aria-label="Dragonpy 1.0">
-              <div class="project-title">Dragonpy 1.0</div>
-              <div class="project-meta">
-                The first full model release in the Dragonpy family. Designed for local inference with a balanced tradeoff between capability and resource cost. Reliable for offline tasks and prototype deployments.
-              </div>
-            </div>
+          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-1" aria-label="Dragonpy 1.0">
+            <div class="project-title">Dragonpy 1.0</div>
+            <div class="project-meta">The first full Dragonpy release: balanced capability and predictable local inference for prototypes and embedded tooling.</div>
+          </div>
 
-            <div style="height:10px"></div>
+          <div style="height:10px"></div>
 
-            <div class="project-card" role="article" aria-label="Dragonpy Max">
-              <div class="project-title">Dragonpy Max</div>
-              <div class="project-meta">
-                A cutdown, Android-only derivative of the Sonic line — optimized for real-world mobile throughput with aggressive pruning while preserving practical capability for edge services.
-              </div>
-            </div>
+          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-max" aria-label="Dragonpy Max">
+            <div class="project-title">Dragonpy Max</div>
+            <div class="project-meta">An Android-optimized cutdown from the Sonic line focused on throughput and runtime efficiency for mobile deployments.</div>
+          </div>
 
-            <div style="height:10px"></div>
+          <div style="height:10px"></div>
 
-            <div class="project-card" role="article" aria-label="Dragonpy sonic">
-              <div class="project-title">Dragonpy sonic</div>
-              <div class="project-meta">
-                The primary high-performance model being developed from scratch. Focuses on scalable architecture, expandable tokenization, and efficient training pipelines. Still under active development with a strong emphasis on open research.
-              </div>
-            </div>
+          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic" aria-label="Dragonpy sonic">
+            <div class="project-title">Dragonpy sonic</div>
+            <div class="project-meta">The flagship model built from first principles: scalable architecture design and active research on training & safety.</div>
+          </div>
 
-            <div style="height:10px"></div>
+          <div style="height:10px"></div>
 
-            <div class="project-card" role="article" aria-label="Dragonpy sonic (gpt4all)">
-              <div class="project-title">Dragonpy sonic (gpt4all)</div>
-              <div class="project-meta">
-                A historical variant that used external assistance and community models during prototyping. Status: discontinued — retained for archival and learning purposes.
-              </div>
-            </div>
+          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic-gpt4all" aria-label="Dragonpy sonic gpt4all">
+            <div class="project-title">Dragonpy sonic (gpt4all)</div>
+            <div class="project-meta">An archived experimental branch that used external community assistance during prototyping. Status: discontinued.</div>
           </div>
         </div>
 
         <div class="card small" style="display:flex;flex-direction:column;gap:10px">
           <div style="font-weight:700;color:var(--muted)">Quick facts</div>
           <div style="font-size:13px;color:var(--muted)">
-            • Mobile-first engineering and model quantization pipelines.
-            <br>• Open research notes and reproducible experiments.
-            <br>• Minimal-cost runtime and permissive licensing goals.
-            <br>• Contact: <a class="link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a>
+            • Platform focus: <strong>Windows-only</strong> (current roadmap).<br>
+            • Contact: <a class="link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a><br>
+            • Goals: open toolchains, transparent benchmarks, minimal-cost deployments.
           </div>
         </div>
-
       </aside>
     </section>
 
-    <section class="card" style="margin-top:22px">
+    <!-- Main projects grid: each card also clickable -->
+    <section class="card" id="projects" style="margin-top:22px;">
       <h3 style="font-size:18px;margin-bottom:8px">Projects & technical notes</h3>
 
       <div class="projects" aria-live="polite">
-        <div class="project-card" role="article">
+        <div class="project-card" role="button" tabindex="0" data-project="krix-alpha">
           <div class="project-title">Krix alpha</div>
           <div class="project-meta" style="margin-top:6px">
-            - Focus: extreme mobile optimization and minimal compute overhead.
-            <br> - Approach: architecture simplification, aggressive quantization, on-device runtime micro-optimizations.
-            <br> - Use cases: embedded assistants, telemetry filtering, lightweight decision agents.
+            Extreme mobile optimization: simplified architecture, aggressive quantization, and micro-optimizations for fast cold starts. Intended for low-resource devices; capacity intentionally limited.
           </div>
         </div>
 
-        <div class="project-card" role="article">
+        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-1">
           <div class="project-title">Dragonpy 1.0</div>
           <div class="project-meta" style="margin-top:6px">
-            - Focus: robust, local inference with predictable resource usage.
-            <br> - Approach: compact attention blocks, tokenization tuned for low-vocabulary domains, and deterministic runtime behavior.
-            <br> - Use cases: offline productivity tools, education assistants, robotics control prototyping.
+            Balanced local inference model designed for deterministic behavior and predictable resource usage. Suitable for offline productivity tools and robotics prototyping.
           </div>
         </div>
 
-        <div class="project-card" role="article">
+        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-lite">
           <div class="project-title">Dragonpy lite</div>
           <div class="project-meta" style="margin-top:6px">
-            - Focus: smallest practical footprint at acceptable capability.
-            <br> - Approach: mixed precision quantization, layer fusion, and optimized inference kernels for ARM devices.
-            <br> - Use cases: games, local chat companions, in-app microservices.
+            Minimal footprint variant using mixed precision quantization and layer fusion to remain useful on memory-constrained devices.
           </div>
         </div>
 
-        <div class="project-card" role="article">
+        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-max">
           <div class="project-title">Dragonpy Max</div>
           <div class="project-meta" style="margin-top:6px">
-            - Focus: Android-only, throughput-oriented variant.
-            <br> - Approach: selective head pruning, runtime batching, and optimized token pipelines for JNI bindings.
-            <br> - Use cases: on-device summarization, edge NLP services in mobile apps.
+            Android-focused cutdown of the Sonic architecture with selective pruning and runtime batching to maximize throughput on mobile.
           </div>
         </div>
 
-        <div class="project-card" role="article">
+        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic">
           <div class="project-title">Dragonpy sonic</div>
           <div class="project-meta" style="margin-top:6px">
-            - Focus: flagship model being engineered from first principles.
-            <br> - Approach: modular attention shards, efficient tokenizer, and training recipes that prioritize parameter efficiency.
-            <br> - Current status: active research; benchmarking and safety audits ongoing.
+            High-performance flagship being developed from scratch with modular attention, efficient tokenization, and training recipes that prioritize parameter efficiency.
           </div>
         </div>
 
-        <div class="project-card" role="article">
-          <div class="project-title">Dragonpy sonic (gpt4all) — discontinued</div>
+        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic-gpt4all">
+          <div class="project-title">Dragonpy sonic (gpt4all)</div>
           <div class="project-meta" style="margin-top:6px">
-            - Note: an archived experimental branch that used external community models during iteration. It helped seed design decisions but will not be continued as part of the main project.
-          </div>
-        </div>
-
-        <div class="project-card" role="article">
-          <div class="project-title">Tooling & pipeline</div>
-          <div class="project-meta" style="margin-top:6px">
-            We build reproducible pipelines for quantization, pruning, benchmarking, and Android packaging. Emphasis on open formats, explainable results, and efficient inference stacks.
-          </div>
-        </div>
-
-        <div class="project-card" role="article">
-          <div class="project-title">Community & governance</div>
-          <div class="project-meta" style="margin-top:6px">
-            The project intends to be community driven. Contributions will be evaluated for safety, reproducibility, and license compatibility. Research notes will be published to foster collaboration.
+            Archived experimental branch that leveraged community models for prototyping. Valuable for historical context; not in active development.
           </div>
         </div>
       </div>
@@ -516,27 +353,26 @@
           <h4 style="margin-bottom:8px">Technical goals</h4>
           <ul style="color:var(--muted);font-size:14px;line-height:1.6;margin-left:16px">
             <li>Maximize compute efficiency per parameter.</li>
-            <li>Enable on-device inference with low power draw.</li>
-            <li>Open toolchains for quantization and deployment.</li>
-            <li>Rigorous benchmarking and reproducible tests.</li>
+            <li>Enable on-device (and now Windows-targeted) inference with low power draw.</li>
+            <li>Open, auditable toolchains for quantization and deployment.</li>
+            <li>Rigorous benchmarking and reproducible experiments.</li>
           </ul>
         </div>
 
         <div class="card small">
           <h4 style="margin-bottom:8px">Ethics & safety</h4>
           <p style="color:var(--muted);font-size:14px;line-height:1.6">
-            Research and release will follow best practices for responsible AI. Safety testing, adversarial analysis, and access controls are part of the roadmap. Prioritizing user privacy and transparency.
+            Releases follow safety-first practices: adversarial testing, access controls, and transparency. Community contributions will be evaluated for safety and license compatibility.
           </p>
         </div>
       </div>
-
     </section>
 
     <footer>
       <div id="contact">
         <div style="font-weight:700">Hypercloud Intelligence</div>
-        <div style="color:var(--muted);font-size:13px">Lead: Ariyan Ahmed (BloxyWave) — Developer and maintainer</div>
-        <div style="color:var(--muted);font-size:13px">Contributions & inquiries: <a class="link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a></div>
+        <div style="color:var(--muted);font-size:13px">Lead: Ariyan Ahmed (BloxyWave) — Developer & maintainer</div>
+        <div style="color:var(--muted);font-size:13px">Contact: <a class="link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a></div>
       </div>
 
       <div style="display:flex;gap:10px;align-items:center">
@@ -546,19 +382,154 @@
     </footer>
   </main>
 
+  <!-- Modal backdrop / project details -->
+  <div class="modal-backdrop" id="modalBackdrop" aria-hidden="true" data-open="false">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" tabindex="-1">
+      <button class="close-btn" id="modalClose">Close ✕</button>
+      <h3 id="modalTitle">Project title</h3>
+      <div class="muted" id="modalSubtitle">Short descriptor</div>
+      <div id="modalBody" style="margin-top:12px; color:#e9f3ff;"></div>
+
+      <div class="modal-footer">
+        <div class="muted" id="modalMeta">Platform & status</div>
+        <div style="display:flex;gap:8px">
+          <a class="btn" id="modalEmail" href="mailto:hypercloudintelligence@gmail.com">Contact</a>
+          <a class="btn primary" id="modalCloseCTA" href="#" onclick="document.getElementById('modalClose').click();return false;">Close</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // Lightweight script - no telemetry, no external calls
+    // Project content map (detailed descriptions shown in modal)
+    const PROJECTS = {
+      "krix-alpha": {
+        title: "Krix alpha",
+        subtitle: "Ultra-optimized, minimal-capacity mobile runtime",
+        platform: "Originally mobile; roadmap: Windows-only (current)",
+        body: `<p><strong>Krix alpha</strong> was engineered as a first-stage, ultra-compact inference engine. It focuses on extremely low memory use, fast cold starts, and pragmatic feature set reduction so it can run on very constrained hardware.</p>
+               <p><strong>Technical approach:</strong> architecture simplification, fixed-size token windows, and aggressive integer quantization. Optimized runtime kernels and small binary packaging were prioritized.</p>
+               <p><strong>Use cases:</strong> telemetry filtering, micro-assistants, and embedded decision agents.</p>`
+      },
+      "dragonpy-lite": {
+        title: "Dragonpy lite",
+        subtitle: "Compact transformer for on-device tasks",
+        platform: "Mobile & edge friendly; Windows migration planned",
+        body: `<p><strong>Dragonpy lite</strong> is a compact transformer variant tuned for on-device inference and integration into apps.</p>
+               <p><strong>Technical approach:</strong> mixed precision quantization, layer fusion, optimized ARM kernels; tuned tokenizers for low-variance domains to reduce compute overhead.</p>
+               <p><strong>Use cases:</strong> in-app assistants, game AI modules, and local inference in offline apps.</p>`
+      },
+      "dragonpy-1": {
+        title: "Dragonpy 1.0",
+        subtitle: "First full Dragonpy release for reliable local inference",
+        platform: "Local-first; Windows-first roadmap",
+        body: `<p><strong>Dragonpy 1.0</strong> is the project's first full model release, engineered for predictable resource usage and reliable local inference.</p>
+               <p><strong>Technical approach:</strong> balanced attention blocks, deterministic runtime behavior, and tokenization optimized for common offline tasks.</p>
+               <p><strong>Use cases:</strong> offline productivity tools, education assistants, robotics control prototypes and rapid prototyping environments.</p>`
+      },
+      "dragonpy-max": {
+        title: "Dragonpy Max",
+        subtitle: "Cutdown Sonic variant optimized for Android throughput",
+        platform: "Android-only (legacy); Windows migration analysis ongoing",
+        body: `<p><strong>Dragonpy Max</strong> is a throughput-oriented cutdown of the Sonic architecture. It focuses on maximizing inference throughput on mobile hardware while preserving practical capabilities.</p>
+               <p><strong>Technical approach:</strong> selective head pruning, runtime batching, JNI bindings for native performance, and pre-warmed token pipelines.</p>
+               <p><strong>Use cases:</strong> on-device summarization, edge NLP services in mobile apps, and user-facing real-time tasks.</p>`
+      },
+      "dragonpy-sonic": {
+        title: "Dragonpy sonic",
+        subtitle: "Flagship model developed from first principles",
+        platform: "Primary research target; Windows-first development",
+        body: `<p><strong>Dragonpy sonic</strong> is the flagship model being developed from scratch. Its design prioritizes parameter efficiency, robust tokenization, and extensible training recipes.</p>
+               <p><strong>Technical approach:</strong> modular attention shards, performance-focused tokenizer, scalable training pipelines, and integrated benchmarking and safety audits.</p>
+               <p><strong>Current status:</strong> active research, iterative benchmarking, and safety evaluation.</p>`
+      },
+      "dragonpy-sonic-gpt4all": {
+        title: "Dragonpy sonic (gpt4all)",
+        subtitle: "Archived prototype using community models (discontinued)",
+        platform: "Archived experimental branch",
+        body: `<p>This historical variant used external community models to accelerate prototyping and inform design choices. It is now discontinued and retained for archival and research lessons.</p>
+               <p><strong>Purpose:</strong> provide lessons learned and seed design decisions for the mainline Sonic development.</p>`
+      }
+    };
+
+    // Modal and trigger handling
     (function(){
-      // Smooth scroll for internal links
-      document.querySelectorAll('a[href^="#"]').forEach(function(link){
-        link.addEventListener('click', function(e){
-          var target = document.querySelector(this.getAttribute('href'));
-          if(target){
+      const modalBackdrop = document.getElementById('modalBackdrop');
+      const modalTitle = document.getElementById('modalTitle');
+      const modalSubtitle = document.getElementById('modalSubtitle');
+      const modalBody = document.getElementById('modalBody');
+      const modalMeta = document.getElementById('modalMeta');
+      const modalClose = document.getElementById('modalClose');
+      const modalEmail = document.getElementById('modalEmail');
+      const focusableSelectors = 'a[href], button, input, textarea, [tabindex]:not([tabindex="-1"])';
+
+      // Open modal with project key
+      function openProject(key) {
+        const data = PROJECTS[key];
+        if(!data) return;
+        modalTitle.textContent = data.title;
+        modalSubtitle.textContent = data.subtitle;
+        modalBody.innerHTML = data.body;
+        modalMeta.textContent = data.platform;
+        modalEmail.href = "mailto:hypercloudintelligence@gmail.com?subject=" + encodeURIComponent("Contribution: " + data.title);
+        modalBackdrop.setAttribute('data-open', 'true');
+        modalBackdrop.setAttribute('aria-hidden', 'false');
+        // focus trap: put focus on close button
+        setTimeout(()=> modalClose.focus(), 120);
+        document.body.style.overflow = 'hidden';
+      }
+
+      // Close modal
+      function closeModal() {
+        modalBackdrop.setAttribute('data-open', 'false');
+        modalBackdrop.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+      }
+
+      // Wire up project cards
+      document.querySelectorAll('[data-project]').forEach(el => {
+        const key = el.getAttribute('data-project');
+        el.addEventListener('click', () => openProject(key));
+        el.addEventListener('keypress', (e) => {
+          if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openProject(key); }
+        });
+      });
+
+      // Close handlers
+      modalClose.addEventListener('click', closeModal);
+      document.getElementById('modalCloseCTA').addEventListener('click', closeModal);
+      modalBackdrop.addEventListener('click', (ev) => {
+        if(ev.target === modalBackdrop) closeModal();
+      });
+
+      // ESC to close
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && modalBackdrop.getAttribute('data-open') === 'true') {
+          closeModal();
+        }
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if(target) {
             e.preventDefault();
-            target.scrollIntoView({behavior:'smooth',block:'start'});
+            target.scrollIntoView({behavior:'smooth', block:'start'});
           }
         });
       });
+
+      // Accessibility: return focus to last focused project card when modal closes
+      let lastFocused = null;
+      document.querySelectorAll('[data-project]').forEach(el => {
+        el.addEventListener('focus', () => lastFocused = el);
+        el.addEventListener('click', () => lastFocused = el);
+      });
+      function returnFocus() {
+        if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+      }
+      modalClose.addEventListener('click', returnFocus);
     })();
   </script>
 </body>
