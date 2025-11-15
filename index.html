@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Hypercloud Intelligence — Home</title>
 
+  <!-- Favicon (internal storage / downloads) -->
+  <!-- Primary (Android/internal storage) -->
+  <link rel="icon" type="image/x-icon" href="file:///storage/emulated/0/Download/hAI.ico">
+  <!-- Fallback relative path -->
+  <link rel="shortcut icon" href="/downloads/hAI.ico" type="image/x-icon">
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
 
@@ -163,6 +169,14 @@
 
     a.link{ color:inherit; text-decoration:none; border-bottom:1px dashed rgba(255,255,255,0.06); transition: color 160ms; }
 
+    /* AI card styles (larger presentation) */
+    .ai-grid{ display:grid; grid-template-columns: 1fr; gap:12px; margin-top:12px; }
+    .ai-card{
+      padding:18px; border-radius:12px; border:1px solid var(--glass-border); background: linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
+    }
+    .ai-title{ font-weight:800; font-size:20px; margin-bottom:6px; background: linear-gradient(90deg,#ffd86b,#ff6ec7); -webkit-background-clip:text; color:transparent; }
+    .ai-desc{ color:#dfe9ff; font-size:15px; line-height:1.6; }
+
     /* Responsive */
     @media (max-width:980px){
       .hero{ grid-template-columns:1fr; }
@@ -188,7 +202,8 @@
       </div>
 
       <nav class="cta" aria-label="Primary">
-        <a class="btn" href="#projects" id="jump-projects">Projects</a>
+        <a class="btn" href="#models" id="jump-models">Models</a>
+        <a class="btn" href="#ais" id="jump-ais">AIs</a>
         <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com">Contribute</a>
       </nav>
     </header>
@@ -242,10 +257,10 @@
         </div>
       </div>
 
-      <!-- Right column: Projects list (clickable) -->
-      <aside class="side" aria-labelledby="projectsHeading">
+      <!-- Right column: Models list (clickable) -->
+      <aside class="side" aria-labelledby="modelsHeading">
         <div class="card project-card" id="projectsSummary" aria-hidden="false">
-          <h3 id="projectsHeading" style="font-size:15px;margin-bottom:8px;color:var(--muted)">Featured projects (click any card)</h3>
+          <h3 id="modelsHeading" style="font-size:15px;margin-bottom:8px;color:var(--muted)">Featured models (click any card)</h3>
 
           <!-- Each card uses data-project to identify modal content -->
           <div class="project-card" role="button" tabindex="0" data-project="krix-alpha" aria-label="Krix alpha">
@@ -300,9 +315,31 @@
       </aside>
     </section>
 
-    <!-- Main projects grid: each card also clickable -->
-    <section class="card" id="projects" style="margin-top:22px;">
-      <h3 style="font-size:18px;margin-bottom:8px">Projects & technical notes</h3>
+    <!-- AIs section (new) -->
+    <section class="card" id="ais" style="margin-top:22px;">
+      <h3 style="font-size:18px;margin-bottom:8px">AIs</h3>
+
+      <div class="ai-grid" aria-live="polite">
+        <div class="ai-card" role="button" tabindex="0" data-project="krix-ai" aria-label="Krix AI">
+          <div class="ai-title">Krix AI</div>
+          <div class="ai-desc" style="margin-top:6px;">
+            <p style="margin-bottom:8px;">
+              <strong>Krix AI</strong> is the project's inaugural chatbot and the primary internal testbed for our model development and evaluation workflows. It serves as a practical integration target for inference pipelines, tokenization strategies, and runtime optimizations.
+            </p>
+            <p style="margin-bottom:8px;">
+              <strong>Role:</strong> production-oriented evaluation agent, used to validate model behavior, performance, and safety checks during iterative development.
+            </p>
+            <p style="margin-bottom:0;">
+              <strong>Created:</strong> February 22, 2025.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Main models grid (formerly projects) -->
+    <section class="card" id="models" style="margin-top:22px;">
+      <h3 style="font-size:18px;margin-bottom:8px">Models & technical notes</h3>
 
       <div class="projects" aria-live="polite">
         <div class="project-card" role="button" tabindex="0" data-project="krix-alpha">
@@ -376,7 +413,7 @@
       </div>
 
       <div style="display:flex;gap:10px;align-items:center">
-        <a class="btn" href="#projects">See projects</a>
+        <a class="btn" href="#models">See models</a>
         <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com">Contribute</a>
       </div>
     </footer>
@@ -449,6 +486,15 @@
         platform: "Archived experimental branch",
         body: `<p>This historical variant used external community models to accelerate prototyping and inform design choices. It is now discontinued and retained for archival and research lessons.</p>
                <p><strong>Purpose:</strong> provide lessons learned and seed design decisions for the mainline Sonic development.</p>`
+      },
+      // New AI entry for modal
+      "krix-ai": {
+        title: "Krix AI",
+        subtitle: "Inaugural chatbot and internal evaluation agent",
+        platform: "Internal testbed; used across development pipelines",
+        body: `<p><strong>Krix AI</strong> is the project's inaugural chatbot and primary evaluation agent. It functions as the internal testbed for runtime integrations, tokenization experiments, behavioral verification, and safety checks across our model family.</p>
+               <p><strong>Responsibilities:</strong> functional testing of inference pipelines, automated evaluation tasks, and serving as a live example for integration within client applications.</p>
+               <p><strong>Created:</strong> February 22, 2025.</p>`
       }
     };
 
@@ -470,7 +516,7 @@
         modalTitle.textContent = data.title;
         modalSubtitle.textContent = data.subtitle;
         modalBody.innerHTML = data.body;
-        modalMeta.textContent = data.platform;
+        modalMeta.textContent = data.platform || '';
         modalEmail.href = "mailto:hypercloudintelligence@gmail.com?subject=" + encodeURIComponent("Contribution: " + data.title);
         modalBackdrop.setAttribute('data-open', 'true');
         modalBackdrop.setAttribute('aria-hidden', 'false');
@@ -484,6 +530,7 @@
         modalBackdrop.setAttribute('data-open', 'false');
         modalBackdrop.setAttribute('aria-hidden', 'true');
         document.body.style.overflow = '';
+        returnFocus();
       }
 
       // Wire up project cards
@@ -497,7 +544,8 @@
 
       // Close handlers
       modalClose.addEventListener('click', closeModal);
-      document.getElementById('modalCloseCTA').addEventListener('click', closeModal);
+      document.getElementById('modalCloseCTA').addEventListener('click', (e) => { e.preventDefault(); closeModal(); });
+
       modalBackdrop.addEventListener('click', (ev) => {
         if(ev.target === modalBackdrop) closeModal();
       });
@@ -520,7 +568,7 @@
         });
       });
 
-      // Accessibility: return focus to last focused project card when modal closes
+      // Accessibility: return focus to last focused element when modal closes
       let lastFocused = null;
       document.querySelectorAll('[data-project]').forEach(el => {
         el.addEventListener('focus', () => lastFocused = el);
@@ -529,7 +577,6 @@
       function returnFocus() {
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
-      modalClose.addEventListener('click', returnFocus);
     })();
   </script>
 </body>
