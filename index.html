@@ -1,4 +1,4 @@
-<!doctype html>
+  <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -63,6 +63,24 @@
     .brand p{ font-size:12px; color:var(--muted); margin-top:2px; }
 
     .cta{ display:flex; gap:12px; align-items:center; }
+
+    .hamburger {
+      display:flex;
+      align-items:center;
+      background:transparent;
+      border:1px solid var(--glass-border);
+      padding:10px 12px;
+      border-radius:10px;
+      color:var(--muted);
+      cursor:pointer;
+      transition:transform 220ms var(--ease), box-shadow 220ms var(--ease);
+      gap:8px;
+    }
+    .hamburger:focus{ outline:3px solid rgba(123,47,247,0.12); }
+    .hamburger:hover{ transform: translateY(-3px); box-shadow: 0 12px 30px rgba(7,12,32,0.45); }
+
+    .hamburger svg{ width:18px; height:18px; display:block; }
+
     .btn{
       background:transparent; border:1px solid var(--glass-border); padding:10px 14px; border-radius:10px;
       color:var(--muted); text-decoration:none; font-size:13px; transition:all 250ms var(--ease); backdrop-filter: blur(6px);
@@ -116,8 +134,6 @@
       animation: slideIn 700ms var(--ease) both;
     }
     @keyframes slideIn { from {opacity:0; transform: translateY(8px)} to {opacity:1; transform: translateY(0)} }
-
-    .platform-note strong{ font-weight:700; color: #fff; }
 
     /* Side project column */
     .side{ display:flex; flex-direction:column; gap:16px; }
@@ -177,6 +193,30 @@
     .ai-title{ font-weight:800; font-size:20px; margin-bottom:6px; background: linear-gradient(90deg,#ffd86b,#ff6ec7); -webkit-background-clip:text; color:transparent; }
     .ai-desc{ color:#dfe9ff; font-size:15px; line-height:1.6; }
 
+    /* In-page About panel (opened by hamburger) */
+    .about-panel {
+      margin-bottom:18px;
+      border-radius:14px;
+      padding:22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.06);
+      box-shadow: 0 18px 50px rgba(3,6,23,0.55);
+      display:none;
+      animation: aboutIn 360ms var(--ease) both;
+    }
+    .about-panel[aria-hidden="false"]{ display:block; }
+    @keyframes aboutIn { from {opacity:0; transform: translateY(8px)} to {opacity:1; transform: translateY(0)} }
+
+    .about-panel .giant-title {
+      font-family:"Space Grotesk", Inter, sans-serif;
+      font-weight:800;
+      font-size: clamp(22px, 4vw, 34px);
+      margin-bottom:10px;
+      background: var(--accent-1); -webkit-background-clip:text; color:transparent;
+    }
+    .about-panel .about-content{ color:#e9f5ff; font-size:15px; line-height:1.7; }
+    .about-panel .about-content p{ margin-bottom:12px; }
+
     /* Responsive */
     @media (max-width:980px){
       .hero{ grid-template-columns:1fr; }
@@ -186,12 +226,31 @@
 
     /* prefers-reduced-motion */
     @media (prefers-reduced-motion: reduce){
-      .title, .project-card, .btn, .modal, .modal-backdrop { animation: none; transition: none; }
+      .title, .project-card, .btn, .modal, .modal-backdrop, .about-panel { animation: none; transition: none; }
     }
   </style>
 </head>
 <body>
   <main class="wrap" role="main">
+
+    <!-- In-page About panel (hidden by default, opened by hamburger) -->
+    <section id="aboutPanel" class="about-panel" aria-hidden="true" tabindex="-1">
+      <h2 class="giant-title">About Hypercloud Intelligence &amp; Ariyan Ahmed (BloxyWave)</h2>
+      <div class="about-content">
+        <p><strong>Ariyan Ahmed</strong> (online alias <strong>BloxyWave</strong>) is the founder and lead developer of Hypercloud Intelligence. Born with a deep curiosity for computing, Ariyan began learning on his first personal computer and rapidly expanded his skills across computer science, software engineering, electronics, game development, and artificial intelligence.</p>
+
+        <p>At 11 years old, Ariyan has pursued a practice-focused approach: rather than only studying concepts, he builds and iterates. This hands-on philosophy led him from early experiments to creating Roblox games, and later to exploring compact, efficient AI model design and deployment.</p>
+
+        <p>Ariyan has used modern AI tools as accelerants for learning. Chat-based assistants helped him study faster and test ideas more quickly; these tools served as learning partners and prototyping aids while he developed his own projects and experiments.</p>
+
+        <p>His technical interests include research-driven model architectures, runtime and quantization optimizations, reproducible toolchains, and production-minded packaging that enables local and low-cost deployments. These goals are reflected in Hypercloud Intelligence’s focus on efficient models, transparent benchmarking, and community-friendly toolchains.</p>
+
+        <p>For readers who want to learn more about the field that inspired him, see <a href="https://en.wikipedia.org/wiki/Artificial_intelligence" target="_blank" rel="noopener noreferrer">AIs on Wikipedia</a>.</p>
+
+        <p>There are many projects and experiments that Ariyan has worked on; this site highlights the primary models and design goals. Thank you for taking the time to read about Hypercloud Intelligence and its mission to make powerful, locally deployable AI accessible and auditable.</p>
+      </div>
+    </section>
+
     <header>
       <div class="brand" aria-label="Brand">
         <div class="logo" aria-hidden="true">HC</div>
@@ -202,6 +261,15 @@
       </div>
 
       <nav class="cta" aria-label="Primary">
+        <!-- Hamburger: toggles the in-page About panel -->
+        <button id="hamburgerBtn" class="hamburger" aria-expanded="false" aria-controls="aboutPanel" title="About">
+          <!-- Clear hamburger icon (SVG) -->
+          <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 7h18M3 12h18M3 17h18"/>
+          </svg>
+          <span style="font-size:13px;color:var(--muted);font-weight:600">About</span>
+        </button>
+
         <a class="btn" href="#models" id="jump-models">Models</a>
         <a class="btn" href="#ais" id="jump-ais">AIs</a>
         <a class="btn primary" href="mailto:hypercloudintelligence@gmail.com">Contribute</a>
@@ -229,7 +297,7 @@
           </p>
 
           <p style="margin-top:10px">
-            Engineering priorities include architecture design, quantization & pruning pipelines, runtime optimization for target platforms, and reproducible toolchains for benchmarking and deployment.
+            Engineering priorities include architecture design, quantization &amp; pruning pipelines, runtime optimization for target platforms, and reproducible toolchains for benchmarking and deployment.
           </p>
         </article>
 
@@ -270,36 +338,36 @@
 
           <div style="height:10px"></div>
 
-          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-lite" aria-label="Dragonpy lite">
-            <div class="project-title">Dragonpy lite</div>
+          <div class="project-card" role="button" tabindex="0" data-project="cosmicify-lite" aria-label="Cosmicify lite">
+            <div class="project-title">Cosmicify lite</div>
             <div class="project-meta">A compact runtime-friendly transformer variant tuned for on-device inference and integration into apps.</div>
           </div>
 
           <div style="height:10px"></div>
 
-          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-1" aria-label="Dragonpy 1.0">
-            <div class="project-title">Dragonpy 1.0</div>
-            <div class="project-meta">The first full Dragonpy release: balanced capability and predictable local inference for prototypes and embedded tooling.</div>
+          <div class="project-card" role="button" tabindex="0" data-project="cosmicify-1" aria-label="Cosmicify 1.0">
+            <div class="project-title">Cosmicify 1.0</div>
+            <div class="project-meta">The first full Cosmicify release: balanced capability and predictable local inference for prototypes and embedded tooling.</div>
           </div>
 
           <div style="height:10px"></div>
 
-          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-max" aria-label="Dragonpy Max">
-            <div class="project-title">Dragonpy Max</div>
+          <div class="project-card" role="button" tabindex="0" data-project="cosmicify-max" aria-label="Cosmicify Max">
+            <div class="project-title">Cosmicify Max</div>
             <div class="project-meta">An Android-optimized cutdown from the Sonic line focused on throughput and runtime efficiency for mobile deployments.</div>
           </div>
 
           <div style="height:10px"></div>
 
-          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic" aria-label="Dragonpy sonic">
-            <div class="project-title">Dragonpy sonic</div>
-            <div class="project-meta">The flagship model built from first principles: scalable architecture design and active research on training & safety.</div>
+          <div class="project-card" role="button" tabindex="0" data-project="cosmicify-sonic" aria-label="Cosmicify sonic">
+            <div class="project-title">Cosmicify sonic</div>
+            <div class="project-meta">The flagship model built from first principles: scalable architecture design and active research on training &amp; safety.</div>
           </div>
 
           <div style="height:10px"></div>
 
-          <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic-gpt4all" aria-label="Dragonpy sonic gpt4all">
-            <div class="project-title">Dragonpy sonic (gpt4all)</div>
+          <div class="project-card" role="button" tabindex="0" data-project="cosmicify-sonic-gpt4all" aria-label="Cosmicify sonic gpt4all">
+            <div class="project-title">Cosmicify sonic (gpt4all)</div>
             <div class="project-meta">An archived experimental branch that used external community assistance during prototyping. Status: discontinued.</div>
           </div>
         </div>
@@ -349,36 +417,36 @@
           </div>
         </div>
 
-        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-1">
-          <div class="project-title">Dragonpy 1.0</div>
+        <div class="project-card" role="button" tabindex="0" data-project="cosmicify-1">
+          <div class="project-title">Cosmicify 1.0</div>
           <div class="project-meta" style="margin-top:6px">
             Balanced local inference model designed for deterministic behavior and predictable resource usage. Suitable for offline productivity tools and robotics prototyping.
           </div>
         </div>
 
-        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-lite">
-          <div class="project-title">Dragonpy lite</div>
+        <div class="project-card" role="button" tabindex="0" data-project="cosmicify-lite">
+          <div class="project-title">Cosmicify lite</div>
           <div class="project-meta" style="margin-top:6px">
             Minimal footprint variant using mixed precision quantization and layer fusion to remain useful on memory-constrained devices.
           </div>
         </div>
 
-        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-max">
-          <div class="project-title">Dragonpy Max</div>
+        <div class="project-card" role="button" tabindex="0" data-project="cosmicify-max">
+          <div class="project-title">Cosmicify Max</div>
           <div class="project-meta" style="margin-top:6px">
             Android-focused cutdown of the Sonic architecture with selective pruning and runtime batching to maximize throughput on mobile.
           </div>
         </div>
 
-        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic">
-          <div class="project-title">Dragonpy sonic</div>
+        <div class="project-card" role="button" tabindex="0" data-project="cosmicify-sonic">
+          <div class="project-title">Cosmicify sonic</div>
           <div class="project-meta" style="margin-top:6px">
             High-performance flagship being developed from scratch with modular attention, efficient tokenization, and training recipes that prioritize parameter efficiency.
           </div>
         </div>
 
-        <div class="project-card" role="button" tabindex="0" data-project="dragonpy-sonic-gpt4all">
-          <div class="project-title">Dragonpy sonic (gpt4all)</div>
+        <div class="project-card" role="button" tabindex="0" data-project="cosmicify-sonic-gpt4all">
+          <div class="project-title">Cosmicify sonic (gpt4all)</div>
           <div class="project-meta" style="margin-top:6px">
             Archived experimental branch that leveraged community models for prototyping. Valuable for historical context; not in active development.
           </div>
@@ -408,7 +476,7 @@
     <footer>
       <div id="contact">
         <div style="font-weight:700">Hypercloud Intelligence</div>
-        <div style="color:var(--muted);font-size:13px">Lead: Ariyan Ahmed (BloxyWave) — Developer & maintainer</div>
+        <div style="color:var(--muted);font-size:13px">Lead: Ariyan Ahmed (BloxyWave) — Developer &amp; maintainer</div>
         <div style="color:var(--muted);font-size:13px">Contact: <a class="link" href="mailto:hypercloudintelligence@gmail.com">hypercloudintelligence@gmail.com</a></div>
       </div>
 
@@ -448,40 +516,40 @@
                <p><strong>Technical approach:</strong> architecture simplification, fixed-size token windows, and aggressive integer quantization. Optimized runtime kernels and small binary packaging were prioritized.</p>
                <p><strong>Use cases:</strong> telemetry filtering, micro-assistants, and embedded decision agents.</p>`
       },
-      "dragonpy-lite": {
-        title: "Dragonpy lite",
+      "cosmicify-lite": {
+        title: "Cosmicify lite",
         subtitle: "Compact transformer for on-device tasks",
         platform: "Mobile & edge friendly; Windows migration planned",
-        body: `<p><strong>Dragonpy lite</strong> is a compact transformer variant tuned for on-device inference and integration into apps.</p>
+        body: `<p><strong>Cosmicify lite</strong> is a compact transformer variant tuned for on-device inference and integration into apps.</p>
                <p><strong>Technical approach:</strong> mixed precision quantization, layer fusion, optimized ARM kernels; tuned tokenizers for low-variance domains to reduce compute overhead.</p>
                <p><strong>Use cases:</strong> in-app assistants, game AI modules, and local inference in offline apps.</p>`
       },
-      "dragonpy-1": {
-        title: "Dragonpy 1.0",
-        subtitle: "First full Dragonpy release for reliable local inference",
+      "cosmicify-1": {
+        title: "Cosmicify 1.0",
+        subtitle: "First full Cosmicify release for reliable local inference",
         platform: "Local-first; Windows-first roadmap",
-        body: `<p><strong>Dragonpy 1.0</strong> is the project's first full model release, engineered for predictable resource usage and reliable local inference.</p>
+        body: `<p><strong>Cosmicify 1.0</strong> is the project's first full model release, engineered for predictable resource usage and reliable local inference.</p>
                <p><strong>Technical approach:</strong> balanced attention blocks, deterministic runtime behavior, and tokenization optimized for common offline tasks.</p>
                <p><strong>Use cases:</strong> offline productivity tools, education assistants, robotics control prototypes and rapid prototyping environments.</p>`
       },
-      "dragonpy-max": {
-        title: "Dragonpy Max",
+      "cosmicify-max": {
+        title: "Cosmicify Max",
         subtitle: "Cutdown Sonic variant optimized for Android throughput",
         platform: "Android-only (legacy); Windows migration analysis ongoing",
-        body: `<p><strong>Dragonpy Max</strong> is a throughput-oriented cutdown of the Sonic architecture. It focuses on maximizing inference throughput on mobile hardware while preserving practical capabilities.</p>
+        body: `<p><strong>Cosmicify Max</strong> is a throughput-oriented cutdown of the Sonic architecture. It focuses on maximizing inference throughput on mobile hardware while preserving practical capabilities.</p>
                <p><strong>Technical approach:</strong> selective head pruning, runtime batching, JNI bindings for native performance, and pre-warmed token pipelines.</p>
                <p><strong>Use cases:</strong> on-device summarization, edge NLP services in mobile apps, and user-facing real-time tasks.</p>`
       },
-      "dragonpy-sonic": {
-        title: "Dragonpy sonic",
+      "cosmicify-sonic": {
+        title: "Cosmicify sonic",
         subtitle: "Flagship model developed from first principles",
         platform: "Primary research target; Windows-first development",
-        body: `<p><strong>Dragonpy sonic</strong> is the flagship model being developed from scratch. Its design prioritizes parameter efficiency, robust tokenization, and extensible training recipes.</p>
+        body: `<p><strong>Cosmicify sonic</strong> is the flagship model being developed from scratch. Its design prioritizes parameter efficiency, robust tokenization, and extensible training recipes.</p>
                <p><strong>Technical approach:</strong> modular attention shards, performance-focused tokenizer, scalable training pipelines, and integrated benchmarking and safety audits.</p>
                <p><strong>Current status:</strong> active research, iterative benchmarking, and safety evaluation.</p>`
       },
-      "dragonpy-sonic-gpt4all": {
-        title: "Dragonpy sonic (gpt4all)",
+      "cosmicify-sonic-gpt4all": {
+        title: "Cosmicify sonic (gpt4all)",
         subtitle: "Archived prototype using community models (discontinued)",
         platform: "Archived experimental branch",
         body: `<p>This historical variant used external community models to accelerate prototyping and inform design choices. It is now discontinued and retained for archival and research lessons.</p>
@@ -507,7 +575,6 @@
       const modalMeta = document.getElementById('modalMeta');
       const modalClose = document.getElementById('modalClose');
       const modalEmail = document.getElementById('modalEmail');
-      const focusableSelectors = 'a[href], button, input, textarea, [tabindex]:not([tabindex="-1"])';
 
       // Open modal with project key
       function openProject(key) {
@@ -577,6 +644,41 @@
       function returnFocus() {
         if(lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
       }
+    })();
+
+    // Hamburger: toggle the in-page About panel
+    (function(){
+      const hamburger = document.getElementById('hamburgerBtn');
+      const panel = document.getElementById('aboutPanel');
+
+      function openPanel() {
+        panel.setAttribute('aria-hidden', 'false');
+        panel.focus();
+        hamburger.setAttribute('aria-expanded', 'true');
+        // scroll into view smoothly
+        panel.scrollIntoView({behavior:'smooth', block:'start'});
+      }
+      function closePanel() {
+        panel.setAttribute('aria-hidden', 'true');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.focus();
+      }
+      function togglePanel() {
+        const isOpen = panel.getAttribute('aria-hidden') === 'false';
+        if(isOpen) closePanel(); else openPanel();
+      }
+
+      hamburger.addEventListener('click', togglePanel);
+      hamburger.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') { e.preventDefault(); togglePanel(); }
+      });
+
+      // Close about panel when Escape is pressed while it's open
+      document.addEventListener('keydown', (e) => {
+        if(e.key === 'Escape' && panel.getAttribute('aria-hidden') === 'false') {
+          closePanel();
+        }
+      });
     })();
   </script>
 </body>
