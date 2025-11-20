@@ -1,4 +1,4 @@
-  <!doctype html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
@@ -45,6 +45,7 @@
       display:flex;
       justify-content:center;
       align-items:flex-start;
+      overflow-x: hidden; /* Prevent horizontal overflow on small screens */
     }
 
     /* Layout container */
@@ -92,7 +93,7 @@
     .btn:hover{ transform: translateY(-4px) }
 
     /* Hero & layout */
-    .hero{ display:grid; grid-template-columns: 1fr 380px; gap:26px; align-items:start; }
+    .hero{ display:grid; grid-template-columns: 1fr minmax(220px, 380px); gap:26px; align-items:start; }
     .card{ background: var(--card-bg); border-radius: var(--radius); padding:26px; border:1px solid var(--glass-border); box-shadow: 0 12px 40px rgba(3,6,23,0.6); }
     .hero-left{ padding:22px; position:relative; overflow:visible; }
 
@@ -236,6 +237,15 @@
     <!-- In-page About panel (hidden by default, opened by hamburger) -->
     <section id="aboutPanel" class="about-panel" aria-hidden="true" tabindex="-1">
       <h2 class="giant-title">About Hypercloud Intelligence &amp; Ariyan Ahmed (BloxyWave)</h2>
+
+      <!-- New Update Blogs action: appears inside the About panel, accessible from the hamburger -->
+      <div style="margin-bottom:12px; display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        <button id="updateBlogsBtn" class="btn primary" style="padding:8px 12px; font-size:14px; cursor:pointer;">
+          Update blogs
+        </button>
+        <div style="color:var(--muted); font-size:13px;">Opens <code>talk2.0.html</code> (new tab)</div>
+      </div>
+
       <div class="about-content">
         <p><strong>Ariyan Ahmed</strong> (online alias <strong>BloxyWave</strong>) is the founder and lead developer of Hypercloud Intelligence. Born with a deep curiosity for computing, Ariyan began learning on his first personal computer and rapidly expanded his skills across computer science, software engineering, electronics, game development, and artificial intelligence.</p>
 
@@ -679,6 +689,24 @@
           closePanel();
         }
       });
+    })();
+
+    // Update Blogs button handler (opens talk2.0.html in a new tab)
+    (function(){
+      const updateBtn = document.getElementById('updateBlogsBtn');
+      if(updateBtn){
+        updateBtn.addEventListener('click', () => {
+          // Opens relative talk2.0.html. If you host that file in the same site/repo, this will open it.
+          // If talk2.0.html is elsewhere (GitHub/raw), replace the path with the full URL.
+          window.open('talk2.0.html', '_blank', 'noopener');
+        });
+        updateBtn.addEventListener('keydown', (e) => {
+          if(e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            updateBtn.click();
+          }
+        });
+      }
     })();
   </script>
 </body>
