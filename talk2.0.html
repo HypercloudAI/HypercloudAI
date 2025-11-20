@@ -1,0 +1,568 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hypercloud Intelligence — Updates & Logs</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#071027; --bg-2:#071a2b; --glass-border: rgba(255,255,255,0.06);
+    --muted: rgba(255,255,255,0.78); --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    --radius:12px; --max-width:1100px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+    background: linear-gradient(180deg,var(--bg-1),var(--bg-2));
+    color:#eef6ff; padding:28px 18px; display:flex; justify-content:center; align-items:flex-start;
+  }
+  .wrap{ width:min(var(--max-width),96%); margin:0 auto 60px; }
+  header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; gap:18px;}
+  .brand{ display:flex; gap:14px; align-items:center; }
+  .logo{ width:56px; height:56px; border-radius:12px; background: linear-gradient(135deg,#0ea5e9,#7c3aed); display:flex; align-items:center; justify-content:center; font-weight:800; font-family:"Space Grotesk"; color:white; }
+  .brand h2{ font-family:"Space Grotesk"; font-weight:700; font-size:18px; color:#f2f7ff; }
+  .muted{ color:var(--muted); font-size:13px; }
+  .btn{ background:transparent; border:1px solid var(--glass-border); padding:8px 12px; border-radius:10px; color:var(--muted); cursor:pointer; }
+  .btn.primary{ background: linear-gradient(90deg,#7b2ff7 0%, #ff6ec7 50%, #ffb86b 100%); color:#071027; border:none; font-weight:600; }
+  .content-grid{ display:grid; grid-template-columns: 1fr 360px; gap:22px; align-items:start; }
+  .card{ background: var(--card-bg); border-radius: var(--radius); padding:20px; border:1px solid var(--glass-border); box-shadow: 0 12px 40px rgba(3,6,23,0.6); }
+  .title{ font-family:"Space Grotesk"; font-weight:800; font-size: clamp(22px, 4.6vw, 36px); background: linear-gradient(90deg,#7b2ff7,#ff6ec7,#ffb86b); -webkit-background-clip:text; background-clip:text; color:transparent; }
+  .small-muted{ color:var(--muted); font-size:12px; }
+  .editor{ display:flex; flex-direction:column; gap:12px; margin-top:12px; }
+  input[type="text"], input[type="email"], input[type="password"], textarea{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--glass-border); background: rgba(255,255,255,0.01); color:#e9f3ff; font-size:14px; outline:none; }
+  textarea{ min-height:140px; resize:vertical; line-height:1.6; font-family: Inter, monospace; }
+  .posts{ display:flex; flex-direction:column; gap:12px; margin-top:12px; }
+  .post{ padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); }
+  .meta-row{ display:flex; gap:12px; align-items:center; color:var(--muted); font-size:13px; margin-bottom:8px; }
+  .preview{ margin-top:8px; color:#e9f3ff; line-height:1.6; }
+  .comments{ margin-top:12px; border-top:1px dashed rgba(255,255,255,0.03); padding-top:12px; }
+  .comment{ padding:8px; border-radius:8px; background: rgba(255,255,255,0.01); margin-bottom:8px; }
+  .comment .meta{ color:var(--muted); font-size:12px; margin-bottom:6px; }
+  .comment-form{ display:flex; flex-direction:column; gap:8px; margin-top:8px; }
+  .small{ padding:12px; border-radius:10px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.01); }
+  .toast{ background:rgba(15,20,30,0.9); padding:10px 14px; border-radius:8px; color:#e9f3ff; font-size:14px; box-shadow:0 8px 26px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); }
+  @media (max-width:980px){ .content-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<main class="wrap" role="main">
+  <header>
+    <div class="brand" aria-label="Brand">
+      <div class="logo" aria-hidden="true">HC</div>
+      <div>
+        <h2>Hypercloud Intelligence</h2>
+        <p class="small-muted">Updates & Logs</p>
+      </div>
+    </div>
+
+    <nav class="actions" aria-label="Primary">
+      <button class="btn" id="btn-refresh">Refresh</button>
+      <button class="btn primary" id="btnContact">Contact</button>
+    </nav>
+  </header>
+
+  <section class="content-grid">
+    <!-- Left: Posts & Editor -->
+    <div>
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div class="title">Updates & Logs</div>
+            <div class="small-muted" style="margin-top:6px">Sign in to view posts. Admins can create and manage posts.</div>
+          </div>
+          <div class="muted" id="signedAs" style="text-align:right">Not signed in</div>
+        </div>
+
+        <!-- Admin editor -->
+        <div id="editorArea" class="editor" style="display:none; margin-top:16px;">
+          <input type="text" id="postTitle" placeholder="Title (e.g. v0.3.1 — token fixes)" />
+          <textarea id="postBody" placeholder="Write details here using simple markdown: **bold**, *italic*, `code`, links like https://example.com"></textarea>
+
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <button class="btn" id="btn-preview">Preview</button>
+              <button class="btn" id="btn-clear">Clear</button>
+            </div>
+
+            <div style="display:flex;gap:8px;align-items:center;">
+              <div class="small-muted" id="uploadStatus" style="min-width:140px;text-align:right">Ready</div>
+              <button class="btn primary" id="btnPublish">Publish update</button>
+            </div>
+          </div>
+
+          <div id="previewBox" class="card" style="display:none;"></div>
+        </div>
+
+        <div id="editorLocked" style="margin-top:12px;">
+          <div class="small muted">Sign in to view posts. Admin tools available to the admin account.</div>
+        </div>
+      </div>
+
+      <!-- Posts list -->
+      <div class="card" style="margin-top:14px;">
+        <h3 style="margin-bottom:10px">Recent updates</h3>
+        <div id="posts" class="posts" aria-live="polite">
+          <!-- Posts loaded here -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: Auth & Info -->
+    <aside class="aside">
+      <div class="card small" id="authCard">
+        <strong style="display:block;margin-bottom:8px">Account</strong>
+
+        <div id="signedOutBox">
+          <input type="email" id="email" placeholder="Email" />
+          <input type="password" id="password" placeholder="Password" />
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <button class="btn primary" id="btnSignIn">Sign in</button>
+            <button class="btn" id="btnSignUp">Sign up</button>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:8px;">
+            <button class="btn" id="btnForgot">Reset password</button>
+          </div>
+          <div style="margin-top:8px" class="small-muted">
+            Create an account to view posts and comment. Verify your email for full access.
+          </div>
+        </div>
+
+        <div id="signedInBox" style="display:none">
+          <div class="muted">Signed in as</div>
+          <div id="signedEmail" style="font-weight:700;margin-top:6px"></div>
+          <div id="verificationRow" style="margin-top:8px"></div>
+          <div style="margin-top:8px;display:flex;gap:8px;">
+            <button class="btn" id="btnRefreshPosts">Refresh</button>
+            <button class="btn" id="btnSignOut">Sign out</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card small">
+        <h4 style="margin-bottom:8px">About</h4>
+        <div class="small-muted" style="line-height:1.6">
+          • Posts stored in Firestore collection <code>updates</code>.<br>
+          • Comments are stored under each post in subcollection <code>comments</code>.<br>
+          • Admin controls are enforced by Firestore rules.
+        </div>
+      </div>
+    </aside>
+  </section>
+</main>
+
+<div id="overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.45);align-items:center;justify-content:center;z-index:1200;">
+  <div id="modalRoot" style="width:100%;max-width:720px;background:linear-gradient(180deg,#071226,#05121a);border-radius:12px;padding:20px;border:1px solid rgba(255,255,255,0.04);box-shadow:0 30px 80px rgba(0,0,0,0.6);color:#e9f3ff;"></div>
+</div>
+<div id="toastWrap" style="position:fixed;right:18px;bottom:18px;display:flex;flex-direction:column;gap:8px;z-index:1300;"></div>
+
+<script type="module">
+  // Firebase imports
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+  import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, doc, deleteDoc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+
+  // CONFIG: paste your firebase config here
+  const firebaseConfig = {
+    apiKey: "AIzaSyBeI5mGf3qFNUrofxcyR1nsObiX9i4Yny0",
+    authDomain: "hypercloudaistudio.firebaseapp.com",
+    projectId: "hypercloudaistudio",
+    storageBucket: "hypercloudaistudio.firebasestorage.app",
+    messagingSenderId: "18172099514",
+    appId: "1:18172099514:web:a3f5d746be285bd943fb83",
+    measurementId: "G-RNHPRFNE13"
+  };
+
+  // ADMIN EMAIL: the account that can create/update/delete posts & delete comments
+  const ADMIN_EMAIL = "hypercloudintelligence@gmail.com";
+
+  // Initialize
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+  // UI refs
+  const toastWrap = document.getElementById('toastWrap');
+  function showToast(msg, t=3500) {
+    const el = document.createElement('div'); el.className='toast'; el.textContent = msg;
+    el.style.cssText = "background:rgba(15,20,30,0.9);padding:10px 14px;border-radius:8px;color:#e9f3ff;font-size:14px;box-shadow:0 8px 26px rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.03);";
+    toastWrap.appendChild(el);
+    setTimeout(()=> { el.style.opacity='0'; setTimeout(()=>el.remove(),300); }, t);
+  }
+
+  function showModal(html, {onConfirm=null, confirmText='OK', cancelText='Cancel', showCancel=true}={}) {
+    const overlay = document.getElementById('overlay'); const root = document.getElementById('modalRoot');
+    overlay.style.display = 'flex'; root.innerHTML = html;
+    const actions = document.createElement('div'); actions.style.cssText='display:flex;gap:8px;justify-content:flex-end;margin-top:14px;';
+    if (showCancel) {
+      const c = document.createElement('button'); c.className='btn'; c.textContent = cancelText;
+      c.addEventListener('click', ()=> overlay.style.display='none'); actions.appendChild(c);
+    }
+    const ok = document.createElement('button'); ok.className='btn primary'; ok.textContent = confirmText;
+    ok.addEventListener('click', async () => { try { if (onConfirm) await onConfirm(root); } finally { overlay.style.display='none'; }});
+    actions.appendChild(ok); root.appendChild(actions);
+    const first = root.querySelector('input,button,textarea'); if (first) first.focus();
+  }
+
+  // Safe markdown -> HTML (escapes HTML to prevent XSS). Simple but functional.
+  function escapeHtml(s) {
+    if (!s) return '';
+    return s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+  }
+  function mdToHtml(md) {
+    if (!md) return '';
+    let out = escapeHtml(md);
+    out = out.replace(/`([^`]+)`/g, '<code>$1</code>');
+    out = out.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+    out = out.replace(/\*([^*]+)\*/g, '<em>$1</em>');
+    out = out.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    out = out.split(/\n\s*\n/).map(p => '<p>' + p.replace(/\n/g,'<br>') + '</p>').join('');
+    return out;
+  }
+  function commentToHtml(txt) {
+    if (!txt) return '';
+    return '<p>' + escapeHtml(txt).replace(/\n/g,'<br>') + '</p>';
+  }
+  function formatDate(ts) {
+    if (!ts) return '';
+    try { const d = ts.toDate ? ts.toDate() : new Date(ts); return d.toLocaleString(); } catch(e) { return ''; }
+  }
+
+  // DOM refs
+  const editorArea = document.getElementById('editorArea');
+  const editorLocked = document.getElementById('editorLocked');
+  const btnPublish = document.getElementById('btnPublish');
+  const btnPreview = document.getElementById('btn-preview');
+  const btnClear = document.getElementById('btn-clear');
+  const previewBox = document.getElementById('previewBox');
+  const postTitle = document.getElementById('postTitle');
+  const postBody = document.getElementById('postBody');
+  const uploadStatus = document.getElementById('uploadStatus');
+  const postsDiv = document.getElementById('posts');
+  const signedAs = document.getElementById('signedAs');
+
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const btnSignIn = document.getElementById('btnSignIn');
+  const btnSignUp = document.getElementById('btnSignUp');
+  const btnForgot = document.getElementById('btnForgot');
+  const signedInBox = document.getElementById('signedInBox');
+  const signedOutBox = document.getElementById('signedOutBox');
+  const signedEmail = document.getElementById('signedEmail');
+  const verificationRow = document.getElementById('verificationRow');
+  const btnSignOut = document.getElementById('btnSignOut');
+  const btnRefresh = document.getElementById('btn-refresh');
+  const btnRefreshPosts = document.getElementById('btnRefreshPosts');
+  const btnContact = document.getElementById('btnContact');
+
+  btnRefresh.addEventListener('click', loadPosts);
+  if (btnRefreshPosts) btnRefreshPosts.addEventListener('click', loadPosts);
+  btnContact.addEventListener('click', ()=> window.location.href = 'mailto:' + ADMIN_EMAIL);
+
+  // AUTH flows
+  btnSignUp.addEventListener('click', async () => {
+    const email = (emailInput.value || '').trim();
+    const pw = passwordInput.value || '';
+    if (!email || !pw) { showToast('Provide email and password.'); return; }
+    if (pw.length < 6) { showToast('Password must be at least 6 characters.'); return; }
+    try {
+      btnSignUp.disabled = true;
+      const cred = await createUserWithEmailAndPassword(auth, email, pw);
+      // send verification
+      await sendEmailVerification(cred.user);
+      showToast('Account created. Verification email sent.');
+      // optionally set a simple displayName from email prefix
+      try {
+        await updateProfile(cred.user, { displayName: email.split('@')[0] });
+      } catch(e){}
+    } catch (err) {
+      console.error(err); showToast('Sign-up failed: ' + (err.message || err));
+    } finally { btnSignUp.disabled = false; }
+  });
+
+  btnSignIn.addEventListener('click', async () => {
+    const email = (emailInput.value || '').trim();
+    const pw = passwordInput.value || '';
+    if (!email || !pw) { showToast('Provide email and password.'); return; }
+    try {
+      btnSignIn.disabled = true;
+      await signInWithEmailAndPassword(auth, email, pw);
+      showToast('Signed in');
+    } catch (err) {
+      console.error(err); showToast('Sign-in failed: ' + (err.message || err));
+    } finally { btnSignIn.disabled = false; }
+  });
+
+  btnForgot.addEventListener('click', () => {
+    const email = (emailInput.value || '').trim();
+    if (!email) { showToast('Enter email to reset password.'); return; }
+    sendPasswordResetEmail(auth, email)
+      .then(()=> showToast('Password reset email sent.'))
+      .catch(err => { console.error(err); showToast('Reset failed: ' + (err.message || err)); });
+  });
+
+  btnSignOut.addEventListener('click', async () => {
+    try { await signOut(auth); showToast('Signed out'); } catch(e) { showToast('Sign-out failed'); }
+  });
+
+  // Auth state observation: require sign-in to view posts (and email verification for full access)
+  let currentUser = null;
+  onAuthStateChanged(auth, async (user) => {
+    currentUser = user;
+    if (user) {
+      signedAs.textContent = "Signed in";
+      signedEmail.textContent = user.email || user.uid;
+      signedInBox.style.display = 'block';
+      signedOutBox.style.display = 'none';
+
+      // show verification status & actions
+      verificationRow.innerHTML = '';
+      if (user.emailVerified) {
+        verificationRow.innerHTML = '<div class="small-muted">Email verified</div>';
+      } else {
+        const msg = document.createElement('div'); msg.className='small-muted';
+        msg.style.display='flex'; msg.style.gap='8px'; msg.style.alignItems='center';
+        msg.innerHTML = `<span>Email not verified</span>`;
+        const resend = document.createElement('button'); resend.className='btn'; resend.textContent='Resend verification';
+        resend.addEventListener('click', async () => {
+          try { await sendEmailVerification(user); showToast('Verification email sent'); } catch(e){ showToast('Failed to send verification'); }
+        });
+        msg.appendChild(resend);
+        verificationRow.appendChild(msg);
+      }
+
+      // if admin email -> show editor
+      if ((user.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+        editorArea.style.display = 'flex';
+        editorLocked.style.display = 'none';
+      } else {
+        editorArea.style.display = 'none';
+        editorLocked.style.display = 'block';
+      }
+
+      // Load posts only for signed-in users; require email verification to view full content
+      await loadPosts();
+    } else {
+      signedAs.textContent = "Not signed in";
+      signedInBox.style.display = 'none';
+      signedOutBox.style.display = 'block';
+      editorArea.style.display = 'none';
+      editorLocked.style.display = 'block';
+      postsDiv.innerHTML = '<div class="small-muted">Sign in to view updates.</div>';
+    }
+  });
+
+  // Editor utilities
+  let currentEditingId = null;
+  btnPreview.addEventListener('click', ()=> {
+    const md = postBody.value || '';
+    previewBox.innerHTML = mdToHtml(md);
+    previewBox.style.display = 'block';
+  });
+  btnClear.addEventListener('click', ()=> { resetEditor(); showToast('Editor cleared'); });
+  function resetEditor() {
+    postTitle.value = ''; postBody.value = ''; previewBox.style.display = 'none';
+    uploadStatus.textContent = 'Ready'; currentEditingId = null; btnPublish.textContent = 'Publish update';
+  }
+
+  // Publish / Update (admin only). Server security rules enforce admin-only operations.
+  btnPublish.addEventListener('click', async () => {
+    if (!currentUser) { showToast('Sign in as admin to publish.'); return; }
+    if ((currentUser.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()) { showToast('Only the admin account can publish.'); return; }
+
+    const title = (postTitle.value || '').trim();
+    const bodyMd = (postBody.value || '').trim();
+    if (!title || !bodyMd) { showToast('Provide title and details.'); return; }
+
+    btnPublish.disabled = true;
+    uploadStatus.textContent = currentEditingId ? 'Updating...' : 'Publishing...';
+
+    try {
+      if (!currentEditingId) {
+        await addDoc(collection(db, 'updates'), {
+          title,
+          body_md: bodyMd,
+          body_html: mdToHtml(bodyMd),
+          authorEmail: currentUser.email || null,
+          createdAt: serverTimestamp()
+        });
+        showToast('Published');
+      } else {
+        const dref = doc(db, 'updates', currentEditingId);
+        await updateDoc(dref, {
+          title,
+          body_md: bodyMd,
+          body_html: mdToHtml(bodyMd),
+          updatedAt: serverTimestamp(),
+          authorEmail: currentUser.email || null
+        });
+        showToast('Updated');
+      }
+      resetEditor();
+      await loadPosts();
+    } catch (err) {
+      console.error(err); showToast('Publish failed: ' + (err.message || err));
+    } finally { btnPublish.disabled = false; uploadStatus.textContent = 'Ready'; }
+  });
+
+  // Load posts -> only when signed-in. If not verified, show limited view (title + notice); require verification to read full content.
+  async function loadPosts() {
+    // require auth to read posts
+    if (!currentUser) {
+      postsDiv.innerHTML = '<div class="small-muted">Sign in to view updates.</div>';
+      return;
+    }
+
+    postsDiv.innerHTML = '<div class="small-muted">Loading posts...</div>';
+    try {
+      const q = query(collection(db, 'updates'), orderBy('createdAt','desc'));
+      const snap = await getDocs(q);
+      postsDiv.innerHTML = '';
+      if (snap.empty) { postsDiv.innerHTML = '<div class="small-muted">No posts yet.</div>'; return; }
+      for (const docSnap of snap.docs) {
+        const data = docSnap.data(); const id = docSnap.id;
+        const el = await createPostElement(id, data);
+        postsDiv.appendChild(el);
+      }
+    } catch (err) {
+      console.error(err);
+      postsDiv.innerHTML = '<div class="small-muted">Failed to load posts.</div>';
+    }
+  }
+
+  // Build post element including comment area (authenticated users can comment)
+  async function createPostElement(id, data) {
+    const wrapper = document.createElement('div'); wrapper.className='post';
+    const h = document.createElement('h4'); h.textContent = data.title || 'Untitled'; wrapper.appendChild(h);
+
+    const meta = document.createElement('div'); meta.className='meta-row';
+    const author = document.createElement('div'); author.textContent = data.authorEmail ? data.authorEmail : 'Unknown';
+    const dot = document.createElement('div'); dot.textContent = '•';
+    const date = document.createElement('div'); date.textContent = formatDate(data.createdAt);
+    meta.appendChild(author); meta.appendChild(dot); meta.appendChild(date);
+    wrapper.appendChild(meta);
+
+    // If user is not verified, show limited view
+    const body = document.createElement('div'); body.className='preview';
+    if (currentUser && currentUser.emailVerified) {
+      body.innerHTML = data.body_html || mdToHtml(data.body_md || '');
+    } else {
+      body.innerHTML = '<div class="small-muted">Verify your email to view post details.</div>';
+    }
+    wrapper.appendChild(body);
+
+    // Admin actions
+    if (currentUser && (currentUser.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+      const btnRow = document.createElement('div'); btnRow.style.marginTop = '10px'; btnRow.style.display = 'flex'; btnRow.style.gap = '8px';
+      const edit = document.createElement('button'); edit.className = 'btn'; edit.textContent = 'Edit';
+      edit.addEventListener('click', () => {
+        postTitle.value = data.title || ''; postBody.value = data.body_md || '';
+        previewBox.innerHTML = data.body_html || mdToHtml(data.body_md || '');
+        previewBox.style.display = 'block'; currentEditingId = id; btnPublish.textContent = 'Update post'; window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+      const del = document.createElement('button'); del.className = 'btn'; del.textContent = 'Delete';
+      del.addEventListener('click', async () => {
+        showModal(`<div><strong>Delete this post?</strong><div style="margin-top:8px;color:var(--muted)">This action cannot be undone.</div></div>`, {
+          confirmText:'Delete', onConfirm: async () => {
+            try { await deleteDoc(doc(db,'updates',id)); showToast('Post deleted'); await loadPosts(); } catch(e){ showToast('Delete failed: ' + (e.message || e)); }
+          }
+        });
+      });
+      btnRow.appendChild(edit); btnRow.appendChild(del); wrapper.appendChild(btnRow);
+    }
+
+    // Comments
+    const commentsWrap = document.createElement('div'); commentsWrap.className='comments';
+    const commentsList = document.createElement('div'); commentsList.className='comments-list';
+    commentsWrap.appendChild(commentsList);
+
+    // Load comments (requires read access in rules -> authenticated)
+    try {
+      const ccol = collection(db, 'updates', id, 'comments');
+      const csnap = await getDocs(query(ccol, orderBy('createdAt','asc')));
+      if (csnap.empty) {
+        const empty = document.createElement('div'); empty.className='small-muted'; empty.textContent = 'No comments yet.';
+        commentsList.appendChild(empty);
+      } else {
+        csnap.forEach(cdoc => commentsList.appendChild(commentElement(id, cdoc.id, cdoc.data())));
+      }
+    } catch (e) {
+      console.error(e); commentsList.appendChild(Object.assign(document.createElement('div'), {textContent:'Failed to load comments.'}));
+    }
+
+    // Comment form: only for authenticated users
+    const form = document.createElement('div'); form.className='comment-form';
+    if (currentUser) {
+      const commentArea = document.createElement('textarea'); commentArea.placeholder = 'Write a public comment...';
+      const submitRow = document.createElement('div'); submitRow.style.display='flex'; submitRow.style.justifyContent='space-between'; submitRow.style.alignItems='center';
+      const submitBtn = document.createElement('button'); submitBtn.className='btn primary'; submitBtn.textContent='Post comment';
+
+      submitBtn.addEventListener('click', async () => {
+        const bodyText = (commentArea.value || '').trim();
+        if (!bodyText) { showToast('Write something first.'); return; }
+        submitBtn.disabled = true;
+        try {
+          const payload = {
+            name: currentUser.displayName || null,
+            email: currentUser.email || null,
+            body: bodyText,
+            authorUid: currentUser.uid || null,
+            createdAt: serverTimestamp()
+          };
+          await addDoc(collection(db, 'updates', id, 'comments'), payload);
+          showToast('Comment posted');
+          // optimistic UI append (local)
+          commentsList.appendChild(commentElement(id, null, { ...payload, createdAt: { toDate: () => new Date() } }));
+          commentArea.value = '';
+        } catch (err) {
+          console.error(err); showToast('Comment failed: ' + (err.message || err));
+        } finally { submitBtn.disabled = false; }
+      });
+
+      form.appendChild(commentArea); submitRow.appendChild(submitBtn); form.appendChild(submitRow);
+    } else {
+      const signNotice = document.createElement('div'); signNotice.className='small-muted'; signNotice.textContent = 'Sign in to post comments.';
+      form.appendChild(signNotice);
+    }
+
+    commentsWrap.appendChild(form);
+    wrapper.appendChild(commentsWrap);
+    return wrapper;
+  }
+
+  function commentElement(postId, commentId, data) {
+    const el = document.createElement('div'); el.className='comment';
+    const meta = document.createElement('div'); meta.className='meta';
+    const who = document.createElement('span'); who.textContent = data.name || (data.email ? data.email : 'Anonymous');
+    const when = document.createElement('span'); when.textContent = ' • ' + formatDate(data.createdAt);
+    meta.appendChild(who); meta.appendChild(when);
+    el.appendChild(meta);
+
+    const body = document.createElement('div'); body.className='body'; body.innerHTML = commentToHtml(data.body || '');
+    el.appendChild(body);
+
+    if (currentUser && (currentUser.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+      const btn = document.createElement('button'); btn.className='btn'; btn.textContent='Delete comment';
+      btn.style.marginTop = '6px';
+      btn.addEventListener('click', async () => {
+        if (!commentId) { showToast('Cannot delete previewed comment. Refresh to remove.'); return; }
+        showModal(`<div><strong>Delete this comment?</strong></div>`, {
+          confirmText:'Delete', onConfirm: async () => {
+            try { await deleteDoc(doc(db, 'updates', postId, 'comments', commentId)); showToast('Comment deleted'); await loadPosts(); } catch(e) { showToast('Delete failed: ' + (e.message || e)); }
+          }
+        });
+      });
+      el.appendChild(btn);
+    }
+    return el;
+  }
+
+  // Close modal by clicking outside
+  document.getElementById('overlay').addEventListener('click', (e) => { if (e.target === document.getElementById('overlay')) document.getElementById('overlay').style.display = 'none'; });
+
+  // Initial state
+  postsDiv.innerHTML = '<div class="small-muted">Sign in to view updates.</div>';
+</script>
+</body>
+</html>
