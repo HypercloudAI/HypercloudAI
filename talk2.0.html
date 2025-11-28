@@ -1,4 +1,4 @@
-<!doctype html>
+  <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -31,7 +31,7 @@
   .title{ font-family:"Space Grotesk"; font-weight:800; font-size: clamp(22px, 4.6vw, 36px); background: linear-gradient(90deg,#7b2ff7,#ff6ec7,#ffb86b); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .small-muted{ color:var(--muted); font-size:12px; }
   .editor{ display:flex; flex-direction:column; gap:12px; margin-top:12px; }
-  input[type="text"], input[type="email"], input[type="password"], textarea{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--glass-border); background: rgba(255,255,255,0.01); color:#e9f3ff; font-size:14px; outline:none; }
+  input[type="text"], input[type="email"], input[type="password"], textarea, select{ width:100%; padding:12px 14px; border-radius:10px; border:1px solid var(--glass-border); background: rgba(255,255,255,0.01); color:#e9f3ff; font-size:14px; outline:none; }
   textarea{ min-height:140px; resize:vertical; line-height:1.6; font-family: Inter, monospace; }
   .posts{ display:flex; flex-direction:column; gap:12px; margin-top:12px; }
   .post{ padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.03); background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.005)); }
@@ -43,6 +43,8 @@
   .comment-form{ display:flex; flex-direction:column; gap:8px; margin-top:8px; }
   .small{ padding:12px; border-radius:10px; border:1px solid var(--glass-border); background:rgba(255,255,255,0.01); }
   .toast{ background:rgba(15,20,30,0.9); padding:10px 14px; border-radius:8px; color:#e9f3ff; font-size:14px; box-shadow:0 8px 26px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); }
+  .muted-link{ color:var(--muted); cursor:pointer; text-decoration:underline; align-self:flex-start; background:transparent; border:none; padding:0; font-size:13px; }
+  .vis-label{ font-size:13px; color:var(--muted); }
   @media (max-width:980px){ .content-grid{ grid-template-columns:1fr; } }
 </style>
 </head>
@@ -70,7 +72,7 @@
         <div style="display:flex;justify-content:space-between;align-items:center;">
           <div>
             <div class="title">Updates & Logs</div>
-            <div class="small-muted" style="margin-top:6px">Sign in to view posts. Admins can create and manage posts.</div>
+            <div class="small-muted" style="margin-top:6px">Posts can be public, restricted to verified users, or admin-only.</div>
           </div>
           <div class="muted" id="signedAs" style="text-align:right">Not signed in</div>
         </div>
@@ -80,6 +82,24 @@
           <input type="text" id="postTitle" placeholder="Title (e.g. v0.3.1 — token fixes)" />
           <textarea id="postBody" placeholder="Write details here using simple markdown: **bold**, *italic*, `code`, links like https://example.com"></textarea>
 
+          <!-- Visibility selector -->
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="flex:1;">
+              <div class="vis-label">Visibility</div>
+              <select id="visibilitySelect" aria-label="Select visibility">
+                <option value="full_public">Full public — anyone (no sign-in)</option>
+                <option value="restricted">Restricted — verified users only</option>
+                <option value="admins">Admins only</option>
+              </select>
+              <div class="small-muted" style="margin-top:6px;font-size:12px">
+                Posts marked "Full public" are visible to everyone. "Restricted" shows full details to signed-in users with a verified email. "Admins only" is visible only to the admin account.
+              </div>
+            </div>
+            <div style="min-width:160px;text-align:right;">
+              <div id="uploadStatus" class="small-muted">Ready</div>
+            </div>
+          </div>
+
           <div style="display:flex;justify-content:space-between;align-items:center;">
             <div>
               <button class="btn" id="btn-preview">Preview</button>
@@ -87,7 +107,6 @@
             </div>
 
             <div style="display:flex;gap:8px;align-items:center;">
-              <div class="small-muted" id="uploadStatus" style="min-width:140px;text-align:right">Ready</div>
               <button class="btn primary" id="btnPublish">Publish update</button>
             </div>
           </div>
@@ -115,17 +134,32 @@
         <strong style="display:block;margin-bottom:8px">Account</strong>
 
         <div id="signedOutBox">
-          <input type="email" id="email" placeholder="Email" />
-          <input type="password" id="password" placeholder="Password" />
-          <div style="display:flex;gap:8px;margin-top:8px;">
-            <button class="btn primary" id="btnSignIn">Sign in</button>
-            <button class="btn" id="btnSignUp">Sign up</button>
+          <!-- Two mode auth UI: sign-in or sign-up -->
+          <div id="signInForm">
+            <input type="email" id="email" placeholder="Email" />
+            <input type="password" id="password" placeholder="Password" />
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn primary" id="btnSignIn">Sign in</button>
+              <button class="btn" id="btnSignUpInline">Sign up</button>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn" id="btnForgot">Reset password</button>
+            </div>
+            <div style="margin-top:8px" class="small-muted">
+              Don't have an account? <button class="muted-link" id="switchToSignUp">Sign up</button>
+            </div>
           </div>
-          <div style="display:flex;gap:8px;margin-top:8px;">
-            <button class="btn" id="btnForgot">Reset password</button>
-          </div>
-          <div style="margin-top:8px" class="small-muted">
-            Create an account to view posts and comment. Verify your email for full access.
+
+          <div id="signUpForm" style="display:none;">
+            <input type="email" id="emailSignUp" placeholder="Email" />
+            <input type="password" id="passwordSignUp" placeholder="Password (min 6 chars)" />
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn primary" id="btnSignUp">Create account</button>
+              <button class="btn" id="btnBackToSignIn">Back</button>
+            </div>
+            <div style="margin-top:8px" class="small-muted">
+              Already have an account? <button class="muted-link" id="switchToSignIn">Sign in</button>
+            </div>
           </div>
         </div>
 
@@ -140,12 +174,13 @@
         </div>
       </div>
 
-      <div class="card small">
+      <div class="card small" style="margin-top:12px;">
         <h4 style="margin-bottom:8px">About</h4>
         <div class="small-muted" style="line-height:1.6">
           • Posts stored in Firestore collection <code>updates</code>.<br>
+          • Visibility: <code>full_public</code> / <code>restricted</code> / <code>admins</code>.<br>
           • Comments are stored under each post in subcollection <code>comments</code>.<br>
-          • Admin controls are enforced by Firestore rules.
+          • Admin controls are enforced by Firestore rules; client enforces visibility for UX.
         </div>
       </div>
     </aside>
@@ -161,7 +196,7 @@
   // Firebase imports
   import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-app.js";
   import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, sendPasswordResetEmail, signInWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
-  import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, doc, deleteDoc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, serverTimestamp, query, orderBy, getDocs, doc, deleteDoc, updateDoc } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore.js";
 
   // CONFIG: paste your firebase config here
   const firebaseConfig = {
@@ -176,7 +211,6 @@
 
   // ADMIN EMAIL: the account that can create/update/delete posts & delete comments
   const ADMIN_EMAIL = "hypercloudintelligence@gmail.com";
-    
 
   // Initialize
   const app = initializeApp(firebaseConfig);
@@ -245,8 +279,12 @@
 
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
+  const emailSignUp = document.getElementById('emailSignUp');
+  const passwordSignUp = document.getElementById('passwordSignUp');
+
   const btnSignIn = document.getElementById('btnSignIn');
   const btnSignUp = document.getElementById('btnSignUp');
+  const btnSignUpInline = document.getElementById('btnSignUpInline');
   const btnForgot = document.getElementById('btnForgot');
   const signedInBox = document.getElementById('signedInBox');
   const signedOutBox = document.getElementById('signedOutBox');
@@ -257,14 +295,28 @@
   const btnRefreshPosts = document.getElementById('btnRefreshPosts');
   const btnContact = document.getElementById('btnContact');
 
+  const signInForm = document.getElementById('signInForm');
+  const signUpForm = document.getElementById('signUpForm');
+  const switchToSignUp = document.getElementById('switchToSignUp');
+  const switchToSignIn = document.getElementById('switchToSignIn');
+  const btnBackToSignIn = document.getElementById('btnBackToSignIn');
+
+  const visibilitySelect = document.getElementById('visibilitySelect');
+
   btnRefresh.addEventListener('click', loadPosts);
   if (btnRefreshPosts) btnRefreshPosts.addEventListener('click', loadPosts);
   btnContact.addEventListener('click', ()=> window.location.href = 'mailto:' + ADMIN_EMAIL);
 
+  // Auth UI toggles
+  switchToSignUp.addEventListener('click', () => { signInForm.style.display='none'; signUpForm.style.display='block'; });
+  switchToSignIn.addEventListener('click', () => { signUpForm.style.display='none'; signInForm.style.display='block'; });
+  btnBackToSignIn.addEventListener('click', () => { signUpForm.style.display='none'; signInForm.style.display='block'; });
+  btnSignUpInline.addEventListener('click', () => { signInForm.style.display='none'; signUpForm.style.display='block'; });
+
   // AUTH flows
   btnSignUp.addEventListener('click', async () => {
-    const email = (emailInput.value || '').trim();
-    const pw = passwordInput.value || '';
+    const email = (emailSignUp.value || '').trim();
+    const pw = passwordSignUp.value || '';
     if (!email || !pw) { showToast('Provide email and password.'); return; }
     if (pw.length < 6) { showToast('Password must be at least 6 characters.'); return; }
     try {
@@ -277,6 +329,8 @@
       try {
         await updateProfile(cred.user, { displayName: email.split('@')[0] });
       } catch(e){}
+      // switch back to sign-in after signup
+      signUpForm.style.display='none'; signInForm.style.display='block';
     } catch (err) {
       console.error(err); showToast('Sign-up failed: ' + (err.message || err));
     } finally { btnSignUp.disabled = false; }
@@ -307,7 +361,7 @@
     try { await signOut(auth); showToast('Signed out'); } catch(e) { showToast('Sign-out failed'); }
   });
 
-  // Auth state observation: require sign-in to view posts (and email verification for full access)
+  // Auth state observation
   let currentUser = null;
   onAuthStateChanged(auth, async (user) => {
     currentUser = user;
@@ -342,7 +396,7 @@
         editorLocked.style.display = 'block';
       }
 
-      // Load posts only for signed-in users; require email verification to view full content
+      // Load posts for current state (signed-in)
       await loadPosts();
     } else {
       signedAs.textContent = "Not signed in";
@@ -350,7 +404,8 @@
       signedOutBox.style.display = 'block';
       editorArea.style.display = 'none';
       editorLocked.style.display = 'block';
-      postsDiv.innerHTML = '<div class="small-muted">Sign in to view updates.</div>';
+      // Load posts for non-signed-in snapshot (will only show full_public posts and placeholders)
+      await loadPosts();
     }
   });
 
@@ -365,15 +420,17 @@
   function resetEditor() {
     postTitle.value = ''; postBody.value = ''; previewBox.style.display = 'none';
     uploadStatus.textContent = 'Ready'; currentEditingId = null; btnPublish.textContent = 'Publish update';
+    visibilitySelect.value = 'restricted';
   }
 
-  // Publish / Update (admin only). Server security rules enforce admin-only operations.
+  // Publish / Update (admin only).
   btnPublish.addEventListener('click', async () => {
     if (!currentUser) { showToast('Sign in as admin to publish.'); return; }
     if ((currentUser.email || '').toLowerCase() !== ADMIN_EMAIL.toLowerCase()) { showToast('Only the admin account can publish.'); return; }
 
     const title = (postTitle.value || '').trim();
     const bodyMd = (postBody.value || '').trim();
+    const visibility = visibilitySelect.value || 'restricted';
     if (!title || !bodyMd) { showToast('Provide title and details.'); return; }
 
     btnPublish.disabled = true;
@@ -386,6 +443,7 @@
           body_md: bodyMd,
           body_html: mdToHtml(bodyMd),
           authorEmail: currentUser.email || null,
+          visibility,
           createdAt: serverTimestamp()
         });
         showToast('Published');
@@ -395,6 +453,7 @@
           title,
           body_md: bodyMd,
           body_html: mdToHtml(bodyMd),
+          visibility,
           updatedAt: serverTimestamp(),
           authorEmail: currentUser.email || null
         });
@@ -407,14 +466,8 @@
     } finally { btnPublish.disabled = false; uploadStatus.textContent = 'Ready'; }
   });
 
-  // Load posts -> only when signed-in. If not verified, show limited view (title + notice); require verification to read full content.
+  // Load posts -> always load (visibility decides who sees details)
   async function loadPosts() {
-    // require auth to read posts
-    if (!currentUser) {
-      postsDiv.innerHTML = '<div class="small-muted">Sign in to view updates.</div>';
-      return;
-    }
-
     postsDiv.innerHTML = '<div class="small-muted">Loading posts...</div>';
     try {
       const q = query(collection(db, 'updates'), orderBy('createdAt','desc'));
@@ -432,7 +485,7 @@
     }
   }
 
-  // Build post element including comment area (authenticated users can comment)
+  // Build post element including comment area (comments still require authenticated reads/writes)
   async function createPostElement(id, data) {
     const wrapper = document.createElement('div'); wrapper.className='post';
     const h = document.createElement('h4'); h.textContent = data.title || 'Untitled'; wrapper.appendChild(h);
@@ -441,15 +494,44 @@
     const author = document.createElement('div'); author.textContent = data.authorEmail ? data.authorEmail : 'Unknown';
     const dot = document.createElement('div'); dot.textContent = '•';
     const date = document.createElement('div'); date.textContent = formatDate(data.createdAt);
-    meta.appendChild(author); meta.appendChild(dot); meta.appendChild(date);
+    const visTag = document.createElement('div'); visTag.style.marginLeft='auto'; visTag.style.color='var(--muted)'; visTag.style.fontSize='12px';
+    const visibility = data.visibility || 'restricted';
+    if (visibility === 'full_public') visTag.textContent = 'Public';
+    else if (visibility === 'restricted') visTag.textContent = 'Restricted';
+    else if (visibility === 'admins') visTag.textContent = 'Admins';
+    meta.appendChild(author); meta.appendChild(dot); meta.appendChild(date); meta.appendChild(visTag);
     wrapper.appendChild(meta);
 
-    // If user is not verified, show limited view
+    // Decide whether current viewer may see full content
+    const canViewFull = (() => {
+      if (visibility === 'full_public') return true;
+      if (visibility === 'admins') {
+        return currentUser && ((currentUser.email || '').toLowerCase() === ADMIN_EMAIL.toLowerCase());
+      }
+      if (visibility === 'restricted') {
+        return currentUser && currentUser.emailVerified;
+      }
+      return false;
+    })();
+
     const body = document.createElement('div'); body.className='preview';
-    if (currentUser && currentUser.emailVerified) {
+    if (canViewFull) {
       body.innerHTML = data.body_html || mdToHtml(data.body_md || '');
     } else {
-      body.innerHTML = '<div class="small-muted">Verify your email to view post details.</div>';
+      if (visibility === 'full_public') {
+        body.innerHTML = data.body_html || mdToHtml(data.body_md || '');
+      } else if (visibility === 'admins') {
+        body.innerHTML = '<div class="small-muted">This post is restricted to admins only.</div>';
+      } else {
+        // restricted
+        if (!currentUser) {
+          body.innerHTML = '<div class="small-muted">Sign in and verify your email to view post details.</div>';
+        } else if (!currentUser.emailVerified) {
+          body.innerHTML = '<div class="small-muted">Verify your email to view post details.</div>';
+        } else {
+          body.innerHTML = data.body_html || mdToHtml(data.body_md || '');
+        }
+      }
     }
     wrapper.appendChild(body);
 
@@ -460,7 +542,9 @@
       edit.addEventListener('click', () => {
         postTitle.value = data.title || ''; postBody.value = data.body_md || '';
         previewBox.innerHTML = data.body_html || mdToHtml(data.body_md || '');
-        previewBox.style.display = 'block'; currentEditingId = id; btnPublish.textContent = 'Update post'; window.scrollTo({ top: 0, behavior: 'smooth' });
+        previewBox.style.display = 'block'; currentEditingId = id; btnPublish.textContent = 'Update post';
+        visibilitySelect.value = data.visibility || 'restricted';
+        window.scrollTo({ top: 0, behavior: 'smooth' });
       });
       const del = document.createElement('button'); del.className = 'btn'; del.textContent = 'Delete';
       del.addEventListener('click', async () => {
@@ -473,12 +557,12 @@
       btnRow.appendChild(edit); btnRow.appendChild(del); wrapper.appendChild(btnRow);
     }
 
-    // Comments
+    // Comments area (reads/writes require rules). Show comments list only if the post is visible to the viewer in some way.
     const commentsWrap = document.createElement('div'); commentsWrap.className='comments';
     const commentsList = document.createElement('div'); commentsList.className='comments-list';
     commentsWrap.appendChild(commentsList);
 
-    // Load comments (requires read access in rules -> authenticated)
+    // Try loading comments (will fail if Firestore rules block unauthenticated reads)
     try {
       const ccol = collection(db, 'updates', id, 'comments');
       const csnap = await getDocs(query(ccol, orderBy('createdAt','asc')));
@@ -492,7 +576,7 @@
       console.error(e); commentsList.appendChild(Object.assign(document.createElement('div'), {textContent:'Failed to load comments.'}));
     }
 
-    // Comment form: only for authenticated users
+    // Comment form: only for authenticated users (posting still allowed even if post is restricted; server rules should enforce)
     const form = document.createElement('div'); form.className='comment-form';
     if (currentUser) {
       const commentArea = document.createElement('textarea'); commentArea.placeholder = 'Write a public comment...';
@@ -563,10 +647,9 @@
   document.getElementById('overlay').addEventListener('click', (e) => { if (e.target === document.getElementById('overlay')) document.getElementById('overlay').style.display = 'none'; });
 
   // Initial state
-  postsDiv.innerHTML = '<div class="small-muted">Sign in to view updates.</div>';
+  // Load posts on startup (shows public ones even before auth state resolved)
+  postsDiv.innerHTML = '<div class="small-muted">Loading posts...</div>';
+  loadPosts();
 </script>
 </body>
-</html>
-
-
-
+</html>   
