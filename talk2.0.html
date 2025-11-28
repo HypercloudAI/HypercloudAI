@@ -1,4 +1,4 @@
-     <!doctype html>
+  <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8" />
@@ -9,27 +9,25 @@
   :root{
     --bg-1:#071027; --bg-2:#071a2b; --glass-border: rgba(255,255,255,0.06);
     --muted: rgba(255,255,255,0.78); --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    --radius:12px; --max-width:720px;
+    --radius:12px; --max-width:1100px;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html,body{height:100%}
   body{
     font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial;
     background: linear-gradient(180deg,var(--bg-1),var(--bg-2));
-    color:#eef6ff; padding:28px 18px; display:flex; justify-content:center; align-items:center;
+    color:#eef6ff; padding:28px 18px; display:flex; justify-content:center; align-items:flex-start;
   }
-  /* center the UI and fix width */
-  .wrap{ width:var(--max-width); margin:0 auto; text-align:center; }
-  header{ display:flex; flex-direction:column; align-items:center; gap:8px; margin-bottom:22px;}
-  .brand{ display:flex; gap:14px; align-items:center; justify-content:center; }
+  .wrap{ width:min(var(--max-width),96%); margin:0 auto 60px; }
+  header{ display:flex; justify-content:space-between; align-items:center; margin-bottom:22px; gap:18px;}
+  .brand{ display:flex; gap:14px; align-items:center; }
   .logo{ width:56px; height:56px; border-radius:12px; background: linear-gradient(135deg,#0ea5e9,#7c3aed); display:flex; align-items:center; justify-content:center; font-weight:800; font-family:"Space Grotesk"; color:white; }
-  .brand h2{ font-family:"Space Grotesk"; font-weight:700; font-size:18px; color:#f2f7ff; margin:0; }
+  .brand h2{ font-family:"Space Grotesk"; font-weight:700; font-size:18px; color:#f2f7ff; }
   .muted{ color:var(--muted); font-size:13px; }
   .btn{ background:transparent; border:1px solid var(--glass-border); padding:8px 12px; border-radius:10px; color:var(--muted); cursor:pointer; }
   .btn.primary{ background: linear-gradient(90deg,#7b2ff7 0%, #ff6ec7 50%, #ffb86b 100%); color:#071027; border:none; font-weight:600; }
-  /* single column fixed layout */
-  .content-grid{ display:block; gap:22px; align-items:start; }
-  .card{ background: var(--card-bg); border-radius: var(--radius); padding:20px; border:1px solid var(--glass-border); box-shadow: 0 12px 40px rgba(3,6,23,0.6); margin-bottom:18px; text-align:left; }
+  .content-grid{ display:grid; grid-template-columns: 1fr 360px; gap:22px; align-items:start; }
+  .card{ background: var(--card-bg); border-radius: var(--radius); padding:20px; border:1px solid var(--glass-border); box-shadow: 0 12px 40px rgba(3,6,23,0.6); }
   .title{ font-family:"Space Grotesk"; font-weight:800; font-size: clamp(22px, 4.6vw, 36px); background: linear-gradient(90deg,#7b2ff7,#ff6ec7,#ffb86b); -webkit-background-clip:text; background-clip:text; color:transparent; }
   .small-muted{ color:var(--muted); font-size:12px; }
   .editor{ display:flex; flex-direction:column; gap:12px; margin-top:12px; }
@@ -47,17 +45,7 @@
   .toast{ background:rgba(15,20,30,0.9); padding:10px 14px; border-radius:8px; color:#e9f3ff; font-size:14px; box-shadow:0 8px 26px rgba(0,0,0,0.6); border:1px solid rgba(255,255,255,0.03); }
   .muted-link{ color:var(--muted); cursor:pointer; text-decoration:underline; align-self:flex-start; background:transparent; border:none; padding:0; font-size:13px; }
   .vis-label{ font-size:13px; color:var(--muted); }
-  /* center the form card content */
-  .auth-card .card-body { display:flex; flex-direction:column; gap:8px; align-items:center; text-align:center; }
-  /* fixed UI space for cycling text to avoid layout shift */
-  #cyclingText { min-height:56px; display:flex; align-items:center; justify-content:center; border-radius:10px; padding:8px 12px; }
-  /* center signup button wrapper */
-  #centerSignupWrap { margin: 14px 0; text-align:center; }
-  /* make sure the layout fits small screens while staying fixed-ish */
-  @media (max-width:420px){
-    :root{ --max-width:360px; }
-    .logo{ width:48px; height:48px; font-size:14px; }
-  }
+  @media (max-width:980px){ .content-grid{ grid-template-columns:1fr; } }
 </style>
 </head>
 <body>
@@ -71,77 +59,22 @@
       </div>
     </div>
 
-    <nav class="actions" aria-label="Primary" style="margin-top:6px;">
+    <nav class="actions" aria-label="Primary">
       <button class="btn" id="btn-refresh">Refresh</button>
       <button class="btn primary" id="btnContact">Contact</button>
     </nav>
   </header>
 
-  <!-- centered sign up button for non-signed-in users -->
-  <div id="centerSignupWrap">
-    <button class="btn primary" id="centerSignUpBtn" style="display:none;">Sign up</button>
-  </div>
-
   <section class="content-grid">
-    <!-- Auth card -->
-    <div class="card auth-card" style="text-align:center;">
-      <div style="display:flex;justify-content:center;align-items:center;gap:12px;margin-bottom:10px;">
-        <div style="font-weight:800;font-family:'Space Grotesk';font-size:18px;">Account</div>
-      </div>
-
-      <div class="card-body">
-        <!-- Cycling motivational / project text -->
-        <div id="cyclingText" style="background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); border:1px solid var(--glass-border); color:#e9f3ff; width:100%;"></div>
-
-        <!-- Two mode auth UI: sign-in or sign-up -->
-        <div id="signedOutBox" style="width:100%;max-width:420px;">
-          <div id="signInForm">
-            <input type="email" id="email" placeholder="Email" />
-            <input type="password" id="password" placeholder="Password" />
-            <div style="display:flex;gap:8px;margin-top:8px;justify-content:center;">
-              <button class="btn primary" id="btnSignIn">Sign in</button>
-            </div>
-            <div style="display:flex;gap:8px;margin-top:8px;justify-content:center;">
-              <button class="btn" id="btnForgot">Reset password</button>
-            </div>
-            <div style="margin-top:8px" class="small-muted">
-              Don't have an account? <button class="muted-link" id="switchToSignUp">Sign up</button>
-            </div>
-          </div>
-
-          <div id="signUpForm" style="display:none;">
-            <input type="email" id="emailSignUp" placeholder="Email" />
-            <input type="password" id="passwordSignUp" placeholder="Password (min 6 chars)" />
-            <div style="display:flex;gap:8px;margin-top:8px;justify-content:center;">
-              <button class="btn primary" id="btnSignUp">Create account</button>
-              <button class="btn" id="btnBackToSignIn">Back</button>
-            </div>
-            <div style="margin-top:8px" class="small-muted">
-              Already have an account? <button class="muted-link" id="switchToSignIn">Sign in</button>
-            </div>
-          </div>
-        </div>
-
-        <div id="signedInBox" style="display:none; width:100%; max-width:420px;">
-          <div class="muted">Signed in as</div>
-          <div id="signedEmail" style="font-weight:700;margin-top:6px"></div>
-          <div id="verificationRow" style="margin-top:8px"></div>
-          <div style="margin-top:8px;display:flex;gap:8px;justify-content:center;">
-            <button class="btn" id="btnRefreshPosts">Refresh</button>
-            <button class="btn" id="btnSignOut">Sign out</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Editor & Posts (stacked single column) -->
+    <!-- Left: Posts & Editor -->
     <div>
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div style="flex:1;text-align:center;">
+          <div>
             <div class="title">Updates & Logs</div>
             <div class="small-muted" style="margin-top:6px">Posts can be public, restricted to verified users, or admin-only.</div>
           </div>
+          <div class="muted" id="signedAs" style="text-align:right">Not signed in</div>
         </div>
 
         <!-- Admin editor -->
@@ -150,8 +83,8 @@
           <textarea id="postBody" placeholder="Write details here using simple markdown: **bold**, *italic*, `code`, links like https://example.com"></textarea>
 
           <!-- Visibility selector -->
-          <div style="display:flex;gap:12px;align-items:center;justify-content:center;">
-            <div style="flex:1;max-width:520px;">
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div style="flex:1;">
               <div class="vis-label">Visibility</div>
               <select id="visibilitySelect" aria-label="Select visibility">
                 <option value="full_public">Full public — anyone (no sign-in)</option>
@@ -167,18 +100,18 @@
             </div>
           </div>
 
-          <div style="display:flex;justify-content:center;align-items:center;margin-top:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
             <div>
               <button class="btn" id="btn-preview">Preview</button>
               <button class="btn" id="btn-clear">Clear</button>
             </div>
 
-            <div style="display:flex;gap:8px;align-items:center;margin-left:12px;">
+            <div style="display:flex;gap:8px;align-items:center;">
               <button class="btn primary" id="btnPublish">Publish update</button>
             </div>
           </div>
 
-          <div id="previewBox" class="card" style="display:none;margin-top:12px;"></div>
+          <div id="previewBox" class="card" style="display:none;"></div>
         </div>
 
         <div id="editorLocked" style="margin-top:12px;">
@@ -188,23 +121,69 @@
 
       <!-- Posts list -->
       <div class="card" style="margin-top:14px;">
-        <h3 style="margin-bottom:10px;text-align:center">Recent updates</h3>
+        <h3 style="margin-bottom:10px">Recent updates</h3>
         <div id="posts" class="posts" aria-live="polite">
           <!-- Posts loaded here -->
         </div>
       </div>
     </div>
 
-    <!-- About card -->
-    <div class="card small" style="margin-top:12px;">
-      <h4 style="margin-bottom:8px; text-align:center">About</h4>
-      <div class="small-muted" style="line-height:1.6; text-align:center">
-        • Posts stored in Firestore collection <code>updates</code>.<br>
-        • Visibility: <code>full_public</code> / <code>restricted</code> / <code>admins</code>.<br>
-        • Comments are stored under each post in subcollection <code>comments</code>.<br>
-        • Admin controls are enforced by Firestore rules; client enforces visibility for UX.
+    <!-- Right column: Auth & Info -->
+    <aside class="aside">
+      <div class="card small" id="authCard">
+        <strong style="display:block;margin-bottom:8px">Account</strong>
+
+        <div id="signedOutBox">
+          <!-- Two mode auth UI: sign-in or sign-up -->
+          <div id="signInForm">
+            <input type="email" id="email" placeholder="Email" />
+            <input type="password" id="password" placeholder="Password" />
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn primary" id="btnSignIn">Sign in</button>
+              <button class="btn" id="btnSignUpInline">Sign up</button>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn" id="btnForgot">Reset password</button>
+            </div>
+            <div style="margin-top:8px" class="small-muted">
+              Don't have an account? <button class="muted-link" id="switchToSignUp">Sign up</button>
+            </div>
+          </div>
+
+          <div id="signUpForm" style="display:none;">
+            <input type="email" id="emailSignUp" placeholder="Email" />
+            <input type="password" id="passwordSignUp" placeholder="Password (min 6 chars)" />
+            <div style="display:flex;gap:8px;margin-top:8px;">
+              <button class="btn primary" id="btnSignUp">Create account</button>
+              <button class="btn" id="btnBackToSignIn">Back</button>
+            </div>
+            <div style="margin-top:8px" class="small-muted">
+              Already have an account? <button class="muted-link" id="switchToSignIn">Sign in</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="signedInBox" style="display:none">
+          <div class="muted">Signed in as</div>
+          <div id="signedEmail" style="font-weight:700;margin-top:6px"></div>
+          <div id="verificationRow" style="margin-top:8px"></div>
+          <div style="margin-top:8px;display:flex;gap:8px;">
+            <button class="btn" id="btnRefreshPosts">Refresh</button>
+            <button class="btn" id="btnSignOut">Sign out</button>
+          </div>
+        </div>
       </div>
-    </div>
+
+      <div class="card small" style="margin-top:12px;">
+        <h4 style="margin-bottom:8px">About</h4>
+        <div class="small-muted" style="line-height:1.6">
+          • Posts stored in Firestore collection <code>updates</code>.<br>
+          • Visibility: <code>full_public</code> / <code>restricted</code> / <code>admins</code>.<br>
+          • Comments are stored under each post in subcollection <code>comments</code>.<br>
+          • Admin controls are enforced by Firestore rules; client enforces visibility for UX.
+        </div>
+      </div>
+    </aside>
   </section>
 </main>
 
@@ -305,6 +284,7 @@
 
   const btnSignIn = document.getElementById('btnSignIn');
   const btnSignUp = document.getElementById('btnSignUp');
+  const btnSignUpInline = document.getElementById('btnSignUpInline');
   const btnForgot = document.getElementById('btnForgot');
   const signedInBox = document.getElementById('signedInBox');
   const signedOutBox = document.getElementById('signedOutBox');
@@ -323,18 +303,15 @@
 
   const visibilitySelect = document.getElementById('visibilitySelect');
 
-  const centerSignUpBtn = document.getElementById('centerSignUpBtn');
-
   btnRefresh.addEventListener('click', loadPosts);
   if (btnRefreshPosts) btnRefreshPosts.addEventListener('click', loadPosts);
   btnContact.addEventListener('click', ()=> window.location.href = 'mailto:' + ADMIN_EMAIL);
 
-  // Auth UI toggles (text links only)
+  // Auth UI toggles
   switchToSignUp.addEventListener('click', () => { signInForm.style.display='none'; signUpForm.style.display='block'; });
   switchToSignIn.addEventListener('click', () => { signUpForm.style.display='none'; signInForm.style.display='block'; });
   btnBackToSignIn.addEventListener('click', () => { signUpForm.style.display='none'; signInForm.style.display='block'; });
-  // center signup button opens signup form
-  centerSignUpBtn.addEventListener('click', ()=> { signInForm.style.display='none'; signUpForm.style.display='block'; window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  btnSignUpInline.addEventListener('click', () => { signInForm.style.display='none'; signUpForm.style.display='block'; });
 
   // AUTH flows
   btnSignUp.addEventListener('click', async () => {
@@ -393,7 +370,6 @@
       signedEmail.textContent = user.email || user.uid;
       signedInBox.style.display = 'block';
       signedOutBox.style.display = 'none';
-      centerSignUpBtn.style.display = 'none';
 
       // show verification status & actions
       verificationRow.innerHTML = '';
@@ -426,10 +402,9 @@
       signedAs.textContent = "Not signed in";
       signedInBox.style.display = 'none';
       signedOutBox.style.display = 'block';
-      centerSignUpBtn.style.display = 'inline-block';
       editorArea.style.display = 'none';
       editorLocked.style.display = 'block';
-      // Load posts for non-signed-in snapshot (will show full_public posts)
+      // Load posts for non-signed-in snapshot (will only show full_public posts and placeholders)
       await loadPosts();
     }
   });
@@ -675,76 +650,6 @@
   // Load posts on startup (shows public ones even before auth state resolved)
   postsDiv.innerHTML = '<div class="small-muted">Loading posts...</div>';
   loadPosts();
-
-  // --- Cycling text logic ---
-  const cyclingEl = document.getElementById('cyclingText');
-  const cyclingTexts = [
-    "HypercloudAI, the multi million thought project",
-    "Krix account starts now",
-    "Build fast, ship faster",
-    "Dream big, code hard",
-    "Stay curious, keep learning",
-    "Create things, that matter",
-    "Secure your account, protect your world",
-    "Ideas into code, then into reality",
-    "Small steps, giant leaps",
-    "Collaborate iterate succeed together",
-    "Pixels to planets to possibilities",
-    "Ship early, learn quickly",
-    "Keep your keys secret and safe",
-    "Test often break kindly",
-    "Playful code, serious results",
-    "Optimize later, prototype now",
-    "Document everything, teach someone",
-    "Be kind to future you",
-    "Version control saves your life",
-    "Backup early, backup often",
-    "Automate boring tasks now",
-    "Ask for help grow faster",
-    "Make tools for creators",
-    "Celebrate tiny wins daily",
-    "Code with curiosity and courage"
-  ];
-  // a set of unique gradients (25 entries)
-  const gradients = [
-    "linear-gradient(90deg,#ff6ec7,#7b2ff7)",
-    "linear-gradient(90deg,#7b2ff7,#0ea5e9)",
-    "linear-gradient(90deg,#ffb86b,#ff6ec7)",
-    "linear-gradient(90deg,#0ea5e9,#7b2ff7)",
-    "linear-gradient(90deg,#ff6ec7,#ffb86b)",
-    "linear-gradient(90deg,#7c3aed,#ff6ec7)",
-    "linear-gradient(90deg,#0ea5e9,#ffb86b)",
-    "linear-gradient(90deg,#ff6ec7,#0ea5e9)",
-    "linear-gradient(90deg,#7b2ff7,#ffb86b)",
-    "linear-gradient(90deg,#ffb86b,#7b2ff7)",
-    "linear-gradient(90deg,#0ea5e9,#ff6ec7)",
-    "linear-gradient(90deg,#7c3aed,#ffb86b)",
-    "linear-gradient(90deg,#ff6ec7,#ffb86b)",
-    "linear-gradient(90deg,#7b2ff7,#0ea5e9)",
-    "linear-gradient(90deg,#ffb86b,#0ea5e9)",
-    "linear-gradient(90deg,#7c3aed,#ff6ec7)",
-    "linear-gradient(90deg,#ff6ec7,#7b2ff7)",
-    "linear-gradient(90deg,#0ea5e9,#7c3aed)",
-    "linear-gradient(90deg,#ffb86b,#7c3aed)",
-    "linear-gradient(90deg,#7b2ff7,#ff6ec7)",
-    "linear-gradient(90deg,#0ea5e9,#ffb86b)",
-    "linear-gradient(90deg,#ff6ec7,#0ea5e9)",
-    "linear-gradient(90deg,#7c3aed,#ffb86b)",
-    "linear-gradient(90deg,#ffb86b,#7b2ff7)",
-    "linear-gradient(90deg,#0ea5e9,#ff6ec7)"
-  ];
-  let cycleIndex = Math.floor(Math.random() * cyclingTexts.length);
-  function showCycle(i){
-    const text = cyclingTexts[i];
-    const grad = gradients[i % gradients.length];
-    cyclingEl.innerHTML = `<span style="font-weight:700; font-family:Space Grotesk, Inter, sans-serif; font-size:15px; background:${grad}; -webkit-background-clip:text; color:transparent;">${text}</span>`;
-  }
-  showCycle(cycleIndex);
-  setInterval(()=> {
-    cycleIndex = (cycleIndex + 1) % cyclingTexts.length;
-    showCycle(cycleIndex);
-  }, 5000);
-
 </script>
 </body>
-</html>
+</html>   
